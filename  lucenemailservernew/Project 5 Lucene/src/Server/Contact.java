@@ -1,5 +1,3 @@
-package Server;
-
 
 
 /**
@@ -14,7 +12,7 @@ public class Contact {
 	static private int primarySent;
 	private String userName;
 	private String IP;
-	private String[] contactList;
+	private string[] contactList;
 	
 	//
 	// Constructors
@@ -34,7 +32,7 @@ public class Contact {
 	 * Get the value of primarySent
 	 * @return the value of primarySent
 	 */
-	public int getPrimarySent ( ) {
+	private int getPrimarySent ( ) {
 		return primarySent;
 	}
 
@@ -42,7 +40,7 @@ public class Contact {
 	 * Set the value of userName
 	 * @param newVar the new value of userName
 	 */
-	public void setUserName ( String newVar ) {
+	private void setUserName ( String newVar ) {
 		userName = newVar;
 	}
 
@@ -50,7 +48,7 @@ public class Contact {
 	 * Get the value of userName
 	 * @return the value of userName
 	 */
-	public String getUserName ( ) {
+	private String getUserName ( ) {
 		return userName;
 	}
 
@@ -58,7 +56,7 @@ public class Contact {
 	 * Set the value of IP
 	 * @param newVar the new value of IP
 	 */
-	public void setIP ( String newVar ) {
+	private void setIP ( String newVar ) {
 		IP = newVar;
 	}
 
@@ -66,7 +64,7 @@ public class Contact {
 	 * Get the value of IP
 	 * @return the value of IP
 	 */
-	public String getIP ( ) {
+	private String getIP ( ) {
 		return IP;
 	}
 
@@ -74,7 +72,7 @@ public class Contact {
 	 * Set the value of contactList
 	 * @param newVar the new value of contactList
 	 */
-	public void setContactList ( String[] newVar ) {
+	private void setContactList ( string[] newVar ) {
 		contactList = newVar;
 	}
 
@@ -82,7 +80,7 @@ public class Contact {
 	 * Get the value of contactList
 	 * @return the value of contactList
 	 */
-	public String[] getContactList ( ) {
+	private string[] getContactList ( ) {
 		return contactList;
 	}
 

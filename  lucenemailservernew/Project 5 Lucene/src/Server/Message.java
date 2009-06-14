@@ -1,5 +1,3 @@
-package Server;
-
 
 
 /**
@@ -35,7 +33,7 @@ public class Message {
 	 * Set the value of sender
 	 * @param newVar the new value of sender
 	 */
-	public void setSender ( String newVar ) {
+	private void setSender ( String newVar ) {
 		sender = newVar;
 	}
 
@@ -43,7 +41,7 @@ public class Message {
 	 * Get the value of sender
 	 * @return the value of sender
 	 */
-	public String getSender ( ) {
+	private String getSender ( ) {
 		return sender;
 	}
 
@@ -51,7 +49,7 @@ public class Message {
 	 * Set the value of recivers
 	 * @param newVar the new value of recivers
 	 */
-	public void setRecivers ( String[] newVar ) {
+	private void setRecivers ( String[] newVar ) {
 		recivers = newVar;
 	}
 
@@ -59,7 +57,7 @@ public class Message {
 	 * Get the value of recivers
 	 * @return the value of recivers
 	 */
-	public String[] getRecivers ( ) {
+	private String[] getRecivers ( ) {
 		return recivers;
 	}
 
@@ -67,7 +65,7 @@ public class Message {
 	 * Set the value of date
 	 * @param newVar the new value of date
 	 */
-	public void setDate ( String newVar ) {
+	private void setDate ( String newVar ) {
 		date = newVar;
 	}
 
@@ -75,7 +73,7 @@ public class Message {
 	 * Get the value of date
 	 * @return the value of date
 	 */
-	public String getDate ( ) {
+	private String getDate ( ) {
 		return date;
 	}
 
@@ -83,7 +81,7 @@ public class Message {
 	 * Set the value of primaryKey
 	 * @param newVar the new value of primaryKey
 	 */
-	public void setPrimaryKey ( int newVar ) {
+	private void setPrimaryKey ( int newVar ) {
 		primaryKey = newVar;
 	}
 
@@ -91,7 +89,7 @@ public class Message {
 	 * Get the value of primaryKey
 	 * @return the value of primaryKey
 	 */
-	public int getPrimaryKey ( ) {
+	private int getPrimaryKey ( ) {
 		return primaryKey;
 	}
 
@@ -99,7 +97,7 @@ public class Message {
 	 * Set the value of body
 	 * @param newVar the new value of body
 	 */
-	public void setBody ( Body newVar ) {
+	private void setBody ( Body newVar ) {
 		body = newVar;
 	}
 
@@ -107,7 +105,7 @@ public class Message {
 	 * Get the value of body
 	 * @return the value of body
 	 */
-	public Body getBody ( ) {
+	private Body getBody ( ) {
 		return body;
 	}
 

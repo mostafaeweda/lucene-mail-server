@@ -1,5 +1,3 @@
-package Server;
-
 
 
 /**
@@ -31,7 +29,7 @@ public class SignupHandler {
 	 * Get the value of usersPrimaryKey
 	 * @return the value of usersPrimaryKey
 	 */
-	public int getUsersPrimaryKey ( ) {
+	private int getUsersPrimaryKey ( ) {
 		return usersPrimaryKey;
 	}
 

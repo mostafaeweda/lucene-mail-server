@@ -1,5 +1,3 @@
-package Server;
-
 
 
 /**
@@ -34,7 +32,7 @@ public class MessageRecord {
 	 * Set the value of primaryKey
 	 * @param newVar the new value of primaryKey
 	 */
-	public void setPrimaryKey ( int newVar ) {
+	private void setPrimaryKey ( int newVar ) {
 		primaryKey = newVar;
 	}
 
@@ -42,7 +40,7 @@ public class MessageRecord {
 	 * Get the value of primaryKey
 	 * @return the value of primaryKey
 	 */
-	public int getPrimaryKey ( ) {
+	private int getPrimaryKey ( ) {
 		return primaryKey;
 	}
 
@@ -50,7 +48,7 @@ public class MessageRecord {
 	 * Set the value of subject
 	 * @param newVar the new value of subject
 	 */
-	public void setSubject ( String newVar ) {
+	private void setSubject ( String newVar ) {
 		subject = newVar;
 	}
 
@@ -58,7 +56,7 @@ public class MessageRecord {
 	 * Get the value of subject
 	 * @return the value of subject
 	 */
-	public String getSubject ( ) {
+	private String getSubject ( ) {
 		return subject;
 	}
 
@@ -66,7 +64,7 @@ public class MessageRecord {
 	 * Set the value of sender
 	 * @param newVar the new value of sender
 	 */
-	public void setSender ( String newVar ) {
+	private void setSender ( String newVar ) {
 		sender = newVar;
 	}
 
@@ -74,7 +72,7 @@ public class MessageRecord {
 	 * Get the value of sender
 	 * @return the value of sender
 	 */
-	public String getSender ( ) {
+	private String getSender ( ) {
 		return sender;
 	}
 
@@ -82,7 +80,7 @@ public class MessageRecord {
 	 * Set the value of date
 	 * @param newVar the new value of date
 	 */
-	public void setDate ( String newVar ) {
+	private void setDate ( String newVar ) {
 		date = newVar;
 	}
 
@@ -90,7 +88,7 @@ public class MessageRecord {
 	 * Get the value of date
 	 * @return the value of date
 	 */
-	public String getDate ( ) {
+	private String getDate ( ) {
 		return date;
 	}
 

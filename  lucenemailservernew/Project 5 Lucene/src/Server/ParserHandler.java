@@ -1,5 +1,3 @@
-package Server;
-
 
 
 /**
@@ -11,10 +9,11 @@ public class ParserHandler {
 	// Fields
 	//
 
+	
 	//
 	// Constructors
 	//
-
+	public ParserHandler () { };
 	
 	//
 	// Methods
