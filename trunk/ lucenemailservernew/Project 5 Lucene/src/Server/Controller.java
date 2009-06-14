@@ -13,8 +13,6 @@ public class Controller {
 	// Fields
 	//
 
-	private Hashtable<String,Contact> onlineContacts;
-	
 	//
 	// Constructors
 	//
