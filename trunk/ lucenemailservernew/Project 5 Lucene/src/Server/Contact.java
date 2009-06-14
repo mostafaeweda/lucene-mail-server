@@ -1,4 +1,4 @@
-
+package Server;
 
 /**
  * Class Contact
@@ -9,10 +9,10 @@ public class Contact {
 	// Fields
 	//
 
-	static private int primarySent;
+	private static int primarySent;
 	private String userName;
 	private String IP;
-	private string[] contactList;
+	private String[] contactList;
 	
 	//
 	// Constructors
@@ -32,7 +32,7 @@ public class Contact {
 	 * Get the value of primarySent
 	 * @return the value of primarySent
 	 */
-	private int getPrimarySent ( ) {
+	public int getPrimarySent ( ) {
 		return primarySent;
 	}
 
@@ -40,7 +40,7 @@ public class Contact {
 	 * Set the value of userName
 	 * @param newVar the new value of userName
 	 */
-	private void setUserName ( String newVar ) {
+	public void setUserName ( String newVar ) {
 		userName = newVar;
 	}
 
@@ -48,7 +48,7 @@ public class Contact {
 	 * Get the value of userName
 	 * @return the value of userName
 	 */
-	private String getUserName ( ) {
+	public String getUserName ( ) {
 		return userName;
 	}
 
@@ -56,7 +56,7 @@ public class Contact {
 	 * Set the value of IP
 	 * @param newVar the new value of IP
 	 */
-	private void setIP ( String newVar ) {
+	public void setIP ( String newVar ) {
 		IP = newVar;
 	}
 
@@ -64,7 +64,7 @@ public class Contact {
 	 * Get the value of IP
 	 * @return the value of IP
 	 */
-	private String getIP ( ) {
+	public String getIP ( ) {
 		return IP;
 	}
 
@@ -72,7 +72,7 @@ public class Contact {
 	 * Set the value of contactList
 	 * @param newVar the new value of contactList
 	 */
-	private void setContactList ( string[] newVar ) {
+	public void setContactList ( String[] newVar ) {
 		contactList = newVar;
 	}
 
@@ -80,7 +80,7 @@ public class Contact {
 	 * Get the value of contactList
 	 * @return the value of contactList
 	 */
-	private string[] getContactList ( ) {
+	public String[] getContactList ( ) {
 		return contactList;
 	}
 

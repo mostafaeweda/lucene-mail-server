@@ -1,3 +1,4 @@
+package Server;
 
 
 /**
@@ -9,7 +10,7 @@ public class SignupHandler {
 	// Fields
 	//
 
-	static private int usersPrimaryKey;
+	private static int usersPrimaryKey;
 	
 	//
 	// Constructors
@@ -29,7 +30,7 @@ public class SignupHandler {
 	 * Get the value of usersPrimaryKey
 	 * @return the value of usersPrimaryKey
 	 */
-	private int getUsersPrimaryKey ( ) {
+	public int getUsersPrimaryKey ( ) {
 		return usersPrimaryKey;
 	}
 
