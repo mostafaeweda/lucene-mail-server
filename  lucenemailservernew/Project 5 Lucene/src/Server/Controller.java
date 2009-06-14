@@ -1,3 +1,6 @@
+package Server;
+
+import java.util.Hashtable;
 
 
 /**
@@ -9,7 +12,7 @@ public class Controller {
 	// Fields
 	//
 
-	private HashTable onlineContacts;
+	private Hashtable<String, Contact> onlineContacts;
 	
 	//
 	// Constructors
@@ -29,7 +32,7 @@ public class Controller {
 	 * Set the value of onlineContacts
 	 * @param newVar the new value of onlineContacts
 	 */
-	private void setOnlineContacts ( HashTable newVar ) {
+	public void setOnlineContacts ( Hashtable<String, Contact> newVar ) {
 		onlineContacts = newVar;
 	}
 
@@ -37,7 +40,7 @@ public class Controller {
 	 * Get the value of onlineContacts
 	 * @return the value of onlineContacts
 	 */
-	private HashTable getOnlineContacts ( ) {
+	public Hashtable<String, Contact> getOnlineContacts ( ) {
 		return onlineContacts;
 	}
 
