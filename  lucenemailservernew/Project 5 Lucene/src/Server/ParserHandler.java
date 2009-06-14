@@ -15,7 +15,7 @@ public class ParserHandler {
 	//
 	// Constructors
 	//
-	public ParserHandler () { };
+
 	
 	//
 	// Methods
