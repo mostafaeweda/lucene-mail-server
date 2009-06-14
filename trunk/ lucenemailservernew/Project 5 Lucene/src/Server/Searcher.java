@@ -1,5 +1,3 @@
-package Server;
-
 
 
 /**
@@ -36,7 +34,6 @@ public class Searcher {
 	 */
 	public MessageRecord search( String query )
 	{
-		return null;
 	}
 
 
@@ -47,7 +44,6 @@ public class Searcher {
 	 */
 	public MessageRecord advancedSearch( String[] fields, String[] values )
 	{
-		return null;
 	}
 
 

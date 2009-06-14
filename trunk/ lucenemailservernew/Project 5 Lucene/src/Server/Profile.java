@@ -1,5 +1,3 @@
-package Server;
-
 
 
 /**
@@ -40,7 +38,7 @@ public class Profile {
 	 * Get the value of questions
 	 * @return the value of questions
 	 */
-	public String[] getQuestions ( ) {
+	private String[] getQuestions ( ) {
 		return questions;
 	}
 
@@ -48,7 +46,7 @@ public class Profile {
 	 * Set the value of firstName
 	 * @param newVar the new value of firstName
 	 */
-	public void setFirstName ( String newVar ) {
+	private void setFirstName ( String newVar ) {
 		firstName = newVar;
 	}
 
@@ -56,7 +54,7 @@ public class Profile {
 	 * Get the value of firstName
 	 * @return the value of firstName
 	 */
-	public String getFirstName ( ) {
+	private String getFirstName ( ) {
 		return firstName;
 	}
 
@@ -64,7 +62,7 @@ public class Profile {
 	 * Set the value of lastName
 	 * @param newVar the new value of lastName
 	 */
-	public void setLastName ( String newVar ) {
+	private void setLastName ( String newVar ) {
 		lastName = newVar;
 	}
 
@@ -72,7 +70,7 @@ public class Profile {
 	 * Get the value of lastName
 	 * @return the value of lastName
 	 */
-	public String getLastName ( ) {
+	private String getLastName ( ) {
 		return lastName;
 	}
 
@@ -80,7 +78,7 @@ public class Profile {
 	 * Set the value of gender
 	 * @param newVar the new value of gender
 	 */
-	public void setGender ( int newVar ) {
+	private void setGender ( int newVar ) {
 		gender = newVar;
 	}
 
@@ -88,7 +86,7 @@ public class Profile {
 	 * Get the value of gender
 	 * @return the value of gender
 	 */
-	public int getGender ( ) {
+	private int getGender ( ) {
 		return gender;
 	}
 
@@ -96,7 +94,7 @@ public class Profile {
 	 * Set the value of dateBirth
 	 * @param newVar the new value of dateBirth
 	 */
-	public void setDateBirth ( String newVar ) {
+	private void setDateBirth ( String newVar ) {
 		dateBirth = newVar;
 	}
 
@@ -104,7 +102,7 @@ public class Profile {
 	 * Get the value of dateBirth
 	 * @return the value of dateBirth
 	 */
-	public String getDateBirth ( ) {
+	private String getDateBirth ( ) {
 		return dateBirth;
 	}
 
@@ -112,7 +110,7 @@ public class Profile {
 	 * Set the value of userName
 	 * @param newVar the new value of userName
 	 */
-	public void setUserName ( String newVar ) {
+	private void setUserName ( String newVar ) {
 		userName = newVar;
 	}
 
@@ -120,7 +118,7 @@ public class Profile {
 	 * Get the value of userName
 	 * @return the value of userName
 	 */
-	public String getUserName ( ) {
+	private String getUserName ( ) {
 		return userName;
 	}
 
@@ -128,7 +126,7 @@ public class Profile {
 	 * Set the value of password
 	 * @param newVar the new value of password
 	 */
-	public void setPassword ( String newVar ) {
+	private void setPassword ( String newVar ) {
 		password = newVar;
 	}
 
@@ -136,7 +134,7 @@ public class Profile {
 	 * Get the value of password
 	 * @return the value of password
 	 */
-	public String getPassword ( ) {
+	private String getPassword ( ) {
 		return password;
 	}
 
@@ -144,7 +142,7 @@ public class Profile {
 	 * Set the value of secretQuestion
 	 * @param newVar the new value of secretQuestion
 	 */
-	public void setSecretQuestion ( String newVar ) {
+	private void setSecretQuestion ( String newVar ) {
 		secretQuestion = newVar;
 	}
 
@@ -152,7 +150,7 @@ public class Profile {
 	 * Get the value of secretQuestion
 	 * @return the value of secretQuestion
 	 */
-	public String getSecretQuestion ( ) {
+	private String getSecretQuestion ( ) {
 		return secretQuestion;
 	}
 
@@ -160,7 +158,7 @@ public class Profile {
 	 * Set the value of secretAnswer
 	 * @param newVar the new value of secretAnswer
 	 */
-	public void setSecretAnswer ( String newVar ) {
+	private void setSecretAnswer ( String newVar ) {
 		secretAnswer = newVar;
 	}
 
@@ -168,7 +166,7 @@ public class Profile {
 	 * Get the value of secretAnswer
 	 * @return the value of secretAnswer
 	 */
-	public String getSecretAnswer ( ) {
+	private String getSecretAnswer ( ) {
 		return secretAnswer;
 	}
 
