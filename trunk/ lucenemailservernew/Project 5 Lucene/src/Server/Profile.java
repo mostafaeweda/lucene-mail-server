@@ -94,8 +94,11 @@ public class Profile {
 	 * Get the value of gender
 	 * @return the value of gender
 	 */
-	public int getGender ( ) {
-		return gender;
+	public String getGender () {
+		if (gender == 1)
+			return "Male";
+		else
+			return "Female";
 	}
 
 	/**
