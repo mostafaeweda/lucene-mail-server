@@ -48,7 +48,7 @@ public class MessageWriter extends XMLwriter {
 		writeElem(hd, "Sender", message.getSender(), atts);
 		writeElem(hd, "Subject", message.getSubject(), atts);
 		writeElem(hd, "Date", message.getDate(), atts);
-		String recievers[] = message.getRecivers();
+		String recievers[] = message.getRecievers();
 		hd.startElement("","","Receivers",atts);
 		for (int i = 0; i < recievers.length; i++)
 		{

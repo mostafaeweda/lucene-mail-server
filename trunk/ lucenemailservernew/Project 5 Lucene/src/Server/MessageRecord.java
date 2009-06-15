@@ -26,7 +26,6 @@ public class MessageRecord {
 	public MessageRecord(int primaryKey, String subject, String sender,
 			String date) 
 	{
-		super();
 		this.primaryKey = primaryKey;
 		this.subject = subject;
 		this.sender = sender;
