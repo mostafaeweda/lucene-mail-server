@@ -25,6 +25,11 @@ public class Message extends MessageRecord
 		super(primaryKey, subject, sender, date);
 	}
 
+	public Message(String userName, String[] recievers, String subject, Body body)
+	{
+		
+	}
+
 	/**
 	 * @return the recievers
 	 */

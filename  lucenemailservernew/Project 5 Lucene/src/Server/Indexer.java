@@ -60,7 +60,7 @@ public class Indexer {
 		document.add(new Field("Sender", message.getSender(), Field.Store.YES, Field.Index.ANALYZED));
 		document.add(new Field("Date", message.getDate(), Field.Store.YES, Field.Index.NOT_ANALYZED));
 		String recieversString = new String();
-		String recievers[]  = message.getRecivers();
+		String recievers[]  = message.getRecievers();
 		recieversString = recievers[0];
 		for(int i = 1 ; i<recievers.length;i++)
 			recieversString = "\n" + recieversString+recievers[i];
