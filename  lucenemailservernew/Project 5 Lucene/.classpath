@@ -4,5 +4,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/home/mostafa/Sossa College/plugins/lucene-2.4.1/lucene-core-2.4.1.jar"/>
 	<classpathentry kind="lib" path="/home/mostafa/Sossa College/plugins/PDFBox-0.7.3/lib/PDFBox-0.7.3.jar"/>
+	<classpathentry kind="lib" path="/home/mostafa/Sossa College/plugins/jtidy-04aug2000r7-dev/build/Tidy.jar"/>
+	<classpathentry kind="lib" path="/home/mostafa/Sossa College/plugins/javamail-1.4.2/mail.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
