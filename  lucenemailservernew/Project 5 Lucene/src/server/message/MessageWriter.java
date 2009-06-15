@@ -1,4 +1,4 @@
-package Server;
+package server.message;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -7,6 +7,10 @@ import java.io.IOException;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
+
+import server.Contact;
+import server.XMLwriter;
+
 
 
 /**

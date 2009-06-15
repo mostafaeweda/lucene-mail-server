@@ -1,4 +1,4 @@
-package Server;
+package server;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -16,7 +16,7 @@ public abstract class XMLwriter {
 	protected File file;
 	
 	protected ContentHandler init(FileOutputStream fos) throws IOException
-	{		
+	{
 		OutputFormat of = new OutputFormat("XML","ISO-8859-1",true);
 		of.setIndent(5);//set indentation dfor XML tags
 		of.setIndenting(true);

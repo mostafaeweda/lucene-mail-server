@@ -1,4 +1,4 @@
-package Server;
+package server;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +10,9 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.RAMDirectory;
 import org.xml.sax.SAXException;
+
+import server.message.Message;
+import server.message.MessageWriter;
 
 
 /**

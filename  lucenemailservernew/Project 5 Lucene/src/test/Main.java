@@ -1,4 +1,4 @@
-package parsers.test;
+package test;
 import javax.mail.Session;
 import javax.mail.Message;
 import javax.mail.Transport;

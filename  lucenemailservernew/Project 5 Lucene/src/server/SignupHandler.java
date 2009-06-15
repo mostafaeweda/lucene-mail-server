@@ -1,9 +1,12 @@
-package Server;
+package server;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.xml.sax.SAXException;
+
+import server.message.Body;
+import server.message.Message;
 
 
 /**

@@ -1,4 +1,4 @@
-package Server;
+package server;
 
 import java.io.IOException;
 
@@ -13,6 +13,9 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.store.FSDirectory;
 import org.xml.sax.SAXException;
+
+import server.message.MessageRecord;
+import server.message.MessageRecordXMLReader;
 
 /**
  * Class Searcher
@@ -71,7 +74,7 @@ public class Searcher
 		MessageRecord[] results = new MessageRecord[numberOfResults];
 		for(int i = 0; i < numberOfResults; i++)
 		{
-			String messagePath = docs[i].get("path");
+			String messagePath = docs[i].get("Path");
 			results[i] = createMessageRecord(messagePath);
 		}
 		return results;
@@ -111,7 +114,7 @@ public class Searcher
 		MessageRecord[] results = new MessageRecord[numFound];
 		for(int i = 0; i < numberOfResults; i++)
 		{
-			String messagePath = docs[i].get("path");
+			String messagePath = docs[i].get("Path");
 			results[i] = createMessageRecord(messagePath);
 		}
 		return results;

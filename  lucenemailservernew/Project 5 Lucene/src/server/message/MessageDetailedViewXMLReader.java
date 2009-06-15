@@ -1,4 +1,4 @@
-package Server;
+package server.message;
 
 import java.io.File;
 import java.io.IOException;
