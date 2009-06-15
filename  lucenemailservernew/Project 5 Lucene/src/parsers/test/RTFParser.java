@@ -12,7 +12,7 @@ import javax.swing.text.rtf.RTFEditorKit;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 
-public class JavaBuiltInRTFHandler implements DocumentHandler 
+public class RTFParser implements DocumentHandler 
 {
 	public Document getDocument(InputStream is) throws DocumentHandlerException 
 	{
@@ -41,7 +41,7 @@ public class JavaBuiltInRTFHandler implements DocumentHandler
 	}
 
 	public static void main(String[] args) throws Exception {
-		JavaBuiltInRTFHandler handler = new JavaBuiltInRTFHandler();
+		RTFParser handler = new RTFParser();
 		Document doc = handler.getDocument(new FileInputStream(
 				new File("lolo.rtf")));
 		System.out.println(doc);

@@ -16,7 +16,8 @@ import org.pdfbox.pdmodel.PDDocumentInformation;
 import org.pdfbox.pdmodel.encryption.DecryptionMaterial;
 import org.pdfbox.util.PDFTextStripper;
 
-public class PDFTrial implements DocumentHandler {
+public class PDFTrial implements DocumentHandler
+{
 	public static String password = "-password";
 
 	public PDFTrial() {
@@ -132,11 +133,5 @@ public class PDFTrial implements DocumentHandler {
 				// eat it, what else can we do?
 			}
 		}
-	}
-
-	@Override
-	public Document getDocument() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
