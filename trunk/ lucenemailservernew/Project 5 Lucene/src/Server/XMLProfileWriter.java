@@ -8,14 +8,11 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
-
 
 /**
  * Class XMLProfileWriter write profile to an XML file
  */
-public class XMLProfileWriter 
+public class XMLProfileWriter extends XMLwriter
 {
 	/**
 	 * a singleton instance of the class
@@ -43,13 +40,7 @@ public class XMLProfileWriter
 		newUserDir.mkdirs();
 		newUserDir = new File("server/accounts/" + profile.getUserName() + "/profile/info.xml");
 		FileOutputStream fos = new FileOutputStream(newUserDir);
-		OutputFormat of = new OutputFormat("XML","ISO-8859-1",true);
-		of.setIndent(5);//set indentation dfor XML tags
-		of.setIndenting(true);
-		//create XML serializer with file output stream and output format
-		XMLSerializer serializer = new XMLSerializer(fos,of);
-		//get content handler to handle tags in XML doc
-		ContentHandler hd = serializer.asContentHandler();
+		ContentHandler hd = init(fos);
 		//write start tag
 		hd.startDocument();
 		AttributesImpl atts = new AttributesImpl();
@@ -73,10 +64,4 @@ public class XMLProfileWriter
 		fos.close();
 	}
 	
-	private void writeElem(ContentHandler hd, String tag, String characters, AttributesImpl atts) throws SAXException
-	{
-		hd.startElement("","",tag,atts);
-		hd.characters(characters.toCharArray(),0,characters.length());
-		hd.endElement("","",tag);
-	}
 }
