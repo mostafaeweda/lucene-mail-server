@@ -1,6 +1,9 @@
 package Server;
 
 import java.io.File;
+import java.io.IOException;
+
+import org.xml.sax.SAXException;
 
 
 /**
@@ -29,7 +32,7 @@ public class SignupHandler {
 	//
 	private SignupHandler () 
 	{ 
-		this.usersPrimaryKey = 0;
+		SignupHandler.usersPrimaryKey = 0;
 	}
 	
 	public static SignupHandler getInstance()
@@ -54,8 +57,9 @@ public class SignupHandler {
 	 */
 	public boolean checkUserExist( String userName )//*changed from void to boolean*
 	{
-		File accountsDir = new File("server\\accounts");//represnets accounts directory
+		File accountsDir = new File("server/accounts");//represnets accounts directory
 		File[] accounts = accountsDir.listFiles();
+		if (accounts == null) return true;
 		for (int i = 0, n = accounts.length; i < n; i++)
 		{
 			if (accounts[i].getName().equals(userName))
@@ -68,10 +72,12 @@ public class SignupHandler {
 	/**
 	 * create a profile on the database with user info
 	 * @param profile user's info
+	 * @throws IOException 
+	 * @throws SAXException 
 	 */
-	public void createProfile(Profile profile )
+	public void createProfile(Profile profile ) throws SAXException, IOException
 	{
-		XMLProfileWriter.getInstance().writeProfile(profile, usersPrimaryKey);
+		XMLProfileWriter.getInstance().writeProfile(profile, "" + usersPrimaryKey);
 		usersPrimaryKey++;
 		sendWelcomeMessage(profile.getUserName());
 	}
