@@ -1,107 +1,55 @@
 package Server;
 
-import java.util.Date;
-
-
-
 /**
  * Class Message
  */
-public class Message {
-
+public class Message extends MessageRecord
+{
 	//
 	// Fields
 	//
-
-	private String sender;
-	private String[] receivers;
-	private String date;
+	private String[] recievers;
 	private Body body;
-	private String subject;
-	public Message (String sender ,String[] receivers, String subject, Body body)
-	{ 
-		this.sender = sender;
-		this.receivers = receivers;
-		this.body = body;
-		this.subject = subject;
-		this.date = new Date().toString();
-	} 
 	
-
-	/**
-	 * Set the value of sender
-	 * @param newVar the new value of sender
-	 */
-	public void setSender ( String newVar ) {
-		sender = newVar;
+	//
+	// Constructors
+	//
+	public Message() 
+	{ 
+		super();
+	}
+	
+	public Message(int primaryKey, String subject, String sender,
+			String date)
+	{
+		super(primaryKey, subject, sender, date);
 	}
 
 	/**
-	 * Get the value of sender
-	 * @return the value of sender
+	 * @return the recievers
 	 */
-	public String getSender ( ) {
-		return sender;
+	public String[] getRecievers() {
+		return recievers;
 	}
 
 	/**
-	 * Set the value of receivers
-	 * @param newVar the new value of receivers
+	 * @param recievers the recievers to set
 	 */
-	public void setRecivers ( String[] newVar ) {
-		receivers = newVar;
+	public void setRecievers(String[] recievers) {
+		this.recievers = recievers;
 	}
 
 	/**
-	 * Get the value of recivers
-	 * @return the value of recivers
+	 * @return the body
 	 */
-	public String[] getRecivers ( ) {
-		return receivers;
-	}
-
-	/**
-	 * Set the value of date
-	 * @param newVar the new value of date
-	 */
-	public void setDate ( String newVar ) {
-		date = newVar;
-	}
-
-	/**
-	 * Get the value of date
-	 * @return the value of date
-	 */
-	public String getDate ( ) {
-		return date;
-	}
-
-	/**
-	 * Set the value of body
-	 * @param newVar the new value of body
-	 */
-	public void setBody ( Body newVar ) {
-		body = newVar;
-	}
-
-	/**
-	 * Get the value of body
-	 * @return the value of body
-	 */
-	public Body getBody ( ) {
+	public Body getBody() {
 		return body;
 	}
 
-
-	public String getSubject() {
-		return subject;
+	/**
+	 * @param body the body to set
+	 */
+	public void setBody(Body body) {
+		this.body = body;
 	}
-
-
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
-
-	
-
 }
