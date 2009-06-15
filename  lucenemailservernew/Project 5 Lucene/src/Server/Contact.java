@@ -9,15 +9,21 @@ public class Contact {
 	// Fields
 	//
 
-	private static int primarySent;
+	private int primarySent;
 	private String userName;
+	private String ID;
 	private String IP;
 	private String[] contactList;
 	
 	//
 	// Constructors
 	//
-	public Contact () { };
+	public Contact (String userName, String id, String IP) 
+	{
+		this.userName = userName;
+		this.ID = id;
+		this.IP = IP;
+	}
 	
 	//
 	// Methods
@@ -84,8 +90,17 @@ public class Contact {
 		return contactList;
 	}
 
-	//
-	// Other methods
-	//
+	public String getID() {
+		return ID;
+	}
+
+	public void setID(String id) {
+		ID = id;
+	}
+
+	public void setPrimarySent(int primarySent) {
+		this.primarySent = primarySent;
+	}
+	
 
 }

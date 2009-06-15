@@ -1,5 +1,7 @@
 package Server;
 
+import java.util.Date;
+
 
 
 /**
@@ -12,24 +14,19 @@ public class Message {
 	//
 
 	private String sender;
-	private String[] recivers;
+	private String[] receivers;
 	private String date;
-	private int primaryKey;
 	private Body body;
+	private String subject;
+	public Message (String sender ,String[] receivers, String subject, Body body)
+	{ 
+		this.sender = sender;
+		this.receivers = receivers;
+		this.body = body;
+		this.subject = subject;
+		this.date = new Date().toString();
+	} 
 	
-	//
-	// Constructors
-	//
-	public Message () { };
-	
-	//
-	// Methods
-	//
-
-
-	//
-	// Accessor methods
-	//
 
 	/**
 	 * Set the value of sender
@@ -48,11 +45,11 @@ public class Message {
 	}
 
 	/**
-	 * Set the value of recivers
-	 * @param newVar the new value of recivers
+	 * Set the value of receivers
+	 * @param newVar the new value of receivers
 	 */
 	public void setRecivers ( String[] newVar ) {
-		recivers = newVar;
+		receivers = newVar;
 	}
 
 	/**
@@ -60,7 +57,7 @@ public class Message {
 	 * @return the value of recivers
 	 */
 	public String[] getRecivers ( ) {
-		return recivers;
+		return receivers;
 	}
 
 	/**
@@ -80,22 +77,6 @@ public class Message {
 	}
 
 	/**
-	 * Set the value of primaryKey
-	 * @param newVar the new value of primaryKey
-	 */
-	public void setPrimaryKey ( int newVar ) {
-		primaryKey = newVar;
-	}
-
-	/**
-	 * Get the value of primaryKey
-	 * @return the value of primaryKey
-	 */
-	public int getPrimaryKey ( ) {
-		return primaryKey;
-	}
-
-	/**
 	 * Set the value of body
 	 * @param newVar the new value of body
 	 */
@@ -111,8 +92,16 @@ public class Message {
 		return body;
 	}
 
-	//
-	// Other methods
-	//
+
+	public String getSubject() {
+		return subject;
+	}
+
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+	
 
 }

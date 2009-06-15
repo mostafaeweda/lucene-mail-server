@@ -85,9 +85,17 @@ public class SignupHandler {
 
 	/**
 	 * @param reciever the new user to send welcome message
+	 * @throws SAXException 
+	 * @throws IOException 
 	 */
-	public void sendWelcomeMessage( String reciever )
+	public void sendWelcomeMessage( String receiver ) throws IOException, SAXException
 	{
+		String userName = ".admin";
+		String subject = "Welcome in A3MK";
+		String text = "Hello " + receiver + ",\n\nwelcome in A3MK world!!!!!";
+		Body body = new Body(text);
+		Message msg = new Message(userName, new String[] {receiver}, subject, body);
+		Indexer.getInstance().addMessage(msg, new Contact(receiver, "" + usersPrimaryKey, "192.168.1.1"));
 	}
 
 
