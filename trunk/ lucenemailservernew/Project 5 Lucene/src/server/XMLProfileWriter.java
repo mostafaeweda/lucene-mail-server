@@ -1,4 +1,4 @@
-package Server;
+package server;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,7 +36,7 @@ public class XMLProfileWriter extends XMLwriter
 	 */
 	public void writeProfile(Profile profile, String id) throws SAXException, IOException
 	{
-File newUserDir = new File("server" + File.pathSeparatorChar + "accounts" + File.separatorChar 
+		File newUserDir = new File("server" + File.pathSeparatorChar + "accounts" + File.separatorChar 
 				+ profile.getUserName() + File.separatorChar + "profile");
 		newUserDir.mkdirs();
 		newUserDir = new File("server" + File.separatorChar + "accounts" + File.separatorChar 

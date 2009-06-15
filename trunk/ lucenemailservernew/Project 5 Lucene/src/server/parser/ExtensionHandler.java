@@ -1,4 +1,4 @@
-package parsers.test;
+package server.parser;
 
 import java.io.FileInputStream;
 

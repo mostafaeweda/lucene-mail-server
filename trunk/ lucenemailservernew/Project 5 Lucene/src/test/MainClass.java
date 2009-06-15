@@ -1,4 +1,4 @@
-package parsers.test;
+package test;
  
 /*
  * @(#)msgsendsample.java 1.19 03/04/22
