@@ -23,6 +23,7 @@ public class SignupHandler {
 	 * instance for having singleton Object for SignUpHandler
 	 */
 	private static SignupHandler instance;
+	
 	//
 	// Constructors
 	//
@@ -70,12 +71,14 @@ public class SignupHandler {
 	 */
 	public void createProfile(Profile profile )
 	{
-		
+		XMLProfileWriter.getInstance().writeProfile(profile, usersPrimaryKey);
+		usersPrimaryKey++;
+		sendWelcomeMessage(profile.getUserName());
 	}
 
 
 	/**
-	 * @param        reciever
+	 * @param reciever the new user to send welcome message
 	 */
 	public void sendWelcomeMessage( String reciever )
 	{
