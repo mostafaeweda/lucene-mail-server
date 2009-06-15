@@ -17,7 +17,7 @@ public class XMLProfileWriter
 	
 	private XMLProfileWriter () {}
 	
-	public static getInstance()
+	public static XMLProfileWriter getInstance()
 	{
 		if (instance == null)
 			instance = new XMLProfileWriter();
@@ -46,6 +46,12 @@ public class XMLProfileWriter
 		hd.startElement("", "", "USER", atts);
 		writeElem(hd, "UserName", profile.getUserName(), atts);
 		writeElem(hd, "ID", id, atts);
+		/*
+		 * encode
+		 * original character * 2 - seed = incrypted character
+		 * decode
+		 * (incrypted character + seed) / 2 = original character
+		 */
 		writeElem(hd, "Password", profile.getPassword(), atts);
 		writeElem(hd, "First Name", profile.getFirstName(), atts);
 		writeElem(hd, "Last Name", profile.getLastName(), atts);
@@ -53,9 +59,8 @@ public class XMLProfileWriter
 		writeElem(hd, "DateBrith", profile.getDateBrith(), atts);
 		writeElem(hd, "SecretQuestion", profile.getSecretQuestion(),atts);
 		writeElem(hd, "SecretAnswer", pprofile.getSecretAnswer(),atts);
-		hd.endElement(uri, localName, qName);
-		
-		
+		hd.endElement("", "", "USER");
+		fos.close();
 	}
 	
 	private void writeElem(ContentHandler hd, String tag, String characters, Attributes atts)
