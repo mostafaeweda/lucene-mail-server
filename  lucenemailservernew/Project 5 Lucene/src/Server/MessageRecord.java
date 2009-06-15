@@ -10,25 +10,32 @@ public class MessageRecord {
 	//
 	// Fields
 	//
+	protected int primaryKey;
+	protected String subject;
+	protected String sender;
+	protected String date;
 
-	private int primaryKey;
-	private String subject;
-	private String sender;
-	private String date;
-	
 	//
 	// Constructors
 	//
-	public MessageRecord () { };
-	
-	//
-	// Methods
-	//
+	public MessageRecord() 
+	{ 
+		
+	}
 
+	public MessageRecord(int primaryKey, String subject, String sender,
+			String date) 
+	{
+		super();
+		this.primaryKey = primaryKey;
+		this.subject = subject;
+		this.sender = sender;
+		this.date = date;
+	}
 
-	//
-	// Accessor methods
-	//
+	public MessageRecord(String substring, String url, String url2) {
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * Set the value of primaryKey
@@ -93,9 +100,4 @@ public class MessageRecord {
 	public String getDate ( ) {
 		return date;
 	}
-
-	//
-	// Other methods
-	//
-
 }
