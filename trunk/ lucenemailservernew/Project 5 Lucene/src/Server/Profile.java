@@ -31,7 +31,19 @@ public class Profile {
 	//
 	// Constructors
 	//
-	public Profile () { };
+	public Profile (String userName,String password,String firstName,String lastName
+			,int gender,String date,int secretQuestion,String secretAns) 
+	{
+		this.userName = userName;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.gender = gender;
+		this.dateBirth = date;
+		this.secretQuestion = questions[secretQuestion];
+		this.secretAnswer = secretAns;
+		
+	}
 	
 	//
 	// Methods
@@ -153,7 +165,7 @@ public class Profile {
 	 * Set the value of secretQuestion
 	 * @param newVar the new value of secretQuestion
 	 */
-	public void setSecretQuestion ( String newVar ) {
+	public void setSecretQuestion (String newVar ) {
 		secretQuestion = newVar;
 	}
 
