@@ -24,11 +24,11 @@ public class ExtensionHandler
 		}
 		else if (ext.equalsIgnoreCase("rtf"))
 		{
-			handler = new JavaBuiltInRTFHandler();
+			handler = new RTFParser();
 		}
 		else if (ext.equals("txt"))
 		{
-			handler = new PlainTextHandler();
+			handler = new PlainTextParser();
 		}
 		else
 			throw new Exception("Supported Extensions are only \"*.pdf\"," +

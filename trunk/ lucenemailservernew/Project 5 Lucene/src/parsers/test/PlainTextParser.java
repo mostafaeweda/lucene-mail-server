@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 
-public class PlainTextHandler implements DocumentHandler {
+public class PlainTextParser implements DocumentHandler {
 	public Document getDocument(InputStream is) throws DocumentHandlerException {
 		String bodyText = "";
 		try {
@@ -35,7 +35,7 @@ public class PlainTextHandler implements DocumentHandler {
 
 	public static void main(String[] args) throws Exception
 	{
-		PlainTextHandler handler = new PlainTextHandler();
+		PlainTextParser handler = new PlainTextParser();
 		Document doc = handler.getDocument(new FileInputStream(
 				new File("sossa.txt")));
 		System.out.println(doc);

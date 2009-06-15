@@ -14,7 +14,8 @@ import org.w3c.tidy.Tidy;
 public class JTidyHTMLHandler implements DocumentHandler 
 {	
 	public org.apache.lucene.document.Document getDocument(InputStream is)
-			throws DocumentHandlerException {
+			throws DocumentHandlerException
+	{
 		Tidy tidy = new Tidy();
 		tidy.setQuiet(true);
 		tidy.setShowWarnings(false);
