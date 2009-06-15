@@ -1,5 +1,6 @@
 package Server;
 
+import java.io.File;
 import java.util.Hashtable;
 
 
@@ -14,10 +15,21 @@ public class Controller {
 
 	private Hashtable<String, Contact> onlineContacts;
 	
-	//
-	// Constructors
-	//
-	public Controller () { };
+	
+	public Controller () 
+	{ 
+		File serverDir = new File("server");//represent server directory
+		File accountsDir = new File("server\\accounts");//represnets accounts directory
+		File messagesDir = new File("server\\messages");//represents messages directory
+		File attachmentsDir = new File("server\\attachments");//represents attachments directory
+		if (! serverDir.exists())
+		{
+			serverDir.mkdir();
+			accountsDir.mkdir();
+			messagesDir.mkdir();
+			attachmentsDir.mkdir();
+		}
+	}
 	
 	//
 	// Methods

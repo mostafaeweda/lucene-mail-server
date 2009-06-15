@@ -20,6 +20,14 @@ public class Profile {
 	private String secretQuestion;
 	private String secretAnswer;
 	
+	static 
+	{
+		questions = new String[]{
+			"What is your pet name?", "What is your favourite car?",
+			"What is your favourite friend's name?", "What is your favourite Country?"
+		};
+	}
+	
 	//
 	// Constructors
 	//
