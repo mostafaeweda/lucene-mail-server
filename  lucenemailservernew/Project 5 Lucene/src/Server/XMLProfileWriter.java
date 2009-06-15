@@ -36,9 +36,11 @@ public class XMLProfileWriter extends XMLwriter
 	 */
 	public void writeProfile(Profile profile, String id) throws SAXException, IOException
 	{
-		File newUserDir = new File("server/accounts/" + profile.getUserName() + "/profile");
+		File newUserDir = new File("server" + File.pathSeparatorChar + "accounts" + File.separatorChar 
+				+ profile.getUserName() + File.separatorChar + "profile");
 		newUserDir.mkdirs();
-		newUserDir = new File("server/accounts/" + profile.getUserName() + "/profile/info.xml");
+		newUserDir = new File("server" + File.separatorChar + "accounts" + File.separatorChar 
+				+ profile.getUserName() + File.separatorChar + "profile" + File.separatorChar + "info.xml");
 		FileOutputStream fos = new FileOutputStream(newUserDir);
 		ContentHandler hd = init(fos);
 		//write start tag
