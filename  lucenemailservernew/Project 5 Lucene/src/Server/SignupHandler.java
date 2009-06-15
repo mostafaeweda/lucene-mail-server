@@ -1,56 +1,76 @@
 package Server;
 
+import java.io.File;
+
 
 /**
- * Class SignupHandler
+ * **********************************************************************************
+ * Class SignupHandler represents a handler for the sign up process, it creates a   * 
+ * new user with a unique ID and a password and store its informations in a users'  *
+ * database																		    *
+ * **********************************************************************************
+ * @author Ahmed Elmorsy, Kareem El-Sayed, Mohamed Abd Elsalam, Mohamed Yasser 
+ * and Mostafa Eweda 
  */
 public class SignupHandler {
 
-	//
-	// Fields
-	//
-
+	/**
+	 * user primary key which represents a unique ID for each user 
+	 */
 	private static int usersPrimaryKey;
 	
+	/**
+	 * instance for having singleton Object for SignUpHandler
+	 */
+	private static SignupHandler instance;
 	//
 	// Constructors
 	//
-	public SignupHandler () { };
+	private SignupHandler () 
+	{ 
+		this.usersPrimaryKey = 0;
+	}
 	
-	//
-	// Methods
-	//
+	public static SignupHandler getInstance()
+	{
+		if (instance == null)
+			instance = new SignupHandler();
+		return instance;
+	}
 
-
-	//
-	// Accessor methods
-	//
-
+	
 	/**
 	 * Get the value of usersPrimaryKey
 	 * @return the value of usersPrimaryKey
 	 */
-	public int getUsersPrimaryKey ( ) {
+	public int getUsersPrimaryKey ( ) 
+	{
 		return usersPrimaryKey;
 	}
 
-	//
-	// Other methods
-	//
-
-	/**
-	 * @param        userName
+	/**check availibilty of the user name passed
+	 * @param userName user name of the user
 	 */
-	public void checkUserExist( String userName )
+	public boolean checkUserExist( String userName )//*changed from void to boolean*
 	{
+		File accountsDir = new File("server\\accounts");//represnets accounts directory
+		File[] accounts = accountsDir.listFiles();
+		for (int i = 0, n = accounts.length; i < n; i++)
+		{
+			if (accounts[i].getName().equals(userName))
+				return false;
+		}
+		return true;
 	}
 
 
 	/**
-	 * @param        profile
+	 * create a profile on the database with user info
+	 * @param profile user's info
 	 */
-	public void createProfile( Profile profile )
+	public void createProfile(Profile profile )
 	{
+		
 	}
 
 
