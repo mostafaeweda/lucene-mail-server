@@ -6,7 +6,7 @@ package Server;
  */
 public class Body {
 
-	private String body;
+	private String text;
 
 
 	//
@@ -14,7 +14,7 @@ public class Body {
 	//
 	public Body (String text) 
 	{
-		this.body = text;
+		this.text = text;
 	}
 	
 	//
@@ -26,18 +26,18 @@ public class Body {
 	// Accessor methods
 	//
 	public String getText() {
-		return body;
+		return text;
 	}
 
 
 	public void setText(String text) {
-		this.body = text;
+		this.text = text;
 	}
 
 	
 	public String toString()
 	{
-		return body;
+		return text;
 	}
 	//
 	// Other methods
