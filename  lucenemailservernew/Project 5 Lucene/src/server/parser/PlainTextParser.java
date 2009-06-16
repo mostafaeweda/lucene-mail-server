@@ -10,8 +10,10 @@ import java.io.InputStreamReader;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 
-public class PlainTextParser implements DocumentHandler {
-	public Document getDocument(InputStream is) throws DocumentHandlerException {
+public class PlainTextParser implements DocumentHandler
+{
+	public Document getDocument(InputStream is) throws DocumentHandlerException
+	{
 		String bodyText = "";
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
