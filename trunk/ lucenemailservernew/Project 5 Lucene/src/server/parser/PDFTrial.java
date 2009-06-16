@@ -5,15 +5,10 @@ import java.io.InputStream;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Fieldable;
-import org.pdfbox.Decrypt;
 import org.pdfbox.cos.COSDocument;
-import org.pdfbox.exceptions.CryptographyException;
-import org.pdfbox.exceptions.InvalidPasswordException;
 import org.pdfbox.pdfparser.PDFParser;
 import org.pdfbox.pdmodel.PDDocument;
 import org.pdfbox.pdmodel.PDDocumentInformation;
-import org.pdfbox.pdmodel.encryption.DecryptionMaterial;
 import org.pdfbox.util.PDFTextStripper;
 
 public class PDFTrial implements DocumentHandler
@@ -43,7 +38,7 @@ public class PDFTrial implements DocumentHandler
 			throw new DocumentHandlerException("Cannot parse PDF document", e);
 		}
 		// decrypt the PDF document, if it is encrypted
-		try {
+		/*try {
 			if (cosDoc.isEncrypted()) {
 				Decrypt decrypt = new Decrypt();
 				DecryptDocument decryptor = new DecryptDocument(cosDoc);
@@ -58,7 +53,7 @@ public class PDFTrial implements DocumentHandler
 		} catch (IOException e) {
 			closeCOSDocument(cosDoc);
 			throw new DocumentHandlerException("Cannot decrypt PDF document", e);
-		}
+		}*/
 		// extract PDF document's textual content
 		String docText = null;
 		try {
@@ -73,7 +68,7 @@ public class PDFTrial implements DocumentHandler
 			// doc.add(Field.("body", docText));
 		}
 		// extract PDF document's meta-data
-		PDDocument pdDoc = null;
+		PDDocument pdDoc = new PDDocument(cosDoc);
 		try {
 			PDDocumentInformation docInfo = pdDoc.getDocumentInformation();
 			String author = docInfo.getAuthor();

@@ -6,6 +6,7 @@ import java.io.InputStream;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.textmining.text.extraction.WordExtractor;
 
 public class TextMiningWordDocHandler implements DocumentHandler {
 	public Document getDocument(InputStream is) throws DocumentHandlerException {
