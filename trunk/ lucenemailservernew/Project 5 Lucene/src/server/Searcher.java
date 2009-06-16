@@ -1,5 +1,6 @@
 package server;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -25,7 +26,7 @@ public class Searcher
 	//
 	// Fields
 	//
-	private static final String DEFAULT_FIELD = "body";
+	private static final String DEFAULT_FIELD = "Body";
 	private static Searcher instance;
 	
 	//
@@ -61,28 +62,32 @@ public class Searcher
 	 */
 	public MessageRecord[] search(String userName, String queryString, final int start, final int end) throws Exception
 	{
-		final int numberOfResults = end - start;
+		int numberOfResults = end - start;
 		QueryParser parser = new QueryParser(DEFAULT_FIELD, new StandardAnalyzer());
 		Query query = parser.parse(queryString);
-		final IndexSearcher searcher = new IndexSearcher(FSDirectory.getDirectory(userName));
+		final IndexSearcher searcher = new IndexSearcher(FSDirectory.getDirectory(Constants.ACCOUNTS_PATH
+				+ userName + File.separatorChar + "indexFiles"));
 		HitCollectorWrapper wrapper = new HitCollectorWrapper(searcher, start, end);
 		searcher.search(query, wrapper);
 		int numFound = wrapper.getNumFound();
 		if (numFound == 0)
 			throw new Exception("No results to preview");
 		final Document []docs = wrapper.getDocuments();
+		numberOfResults = Math.min(numFound, numberOfResults);
 		MessageRecord[] results = new MessageRecord[numberOfResults];
 		for(int i = 0; i < numberOfResults; i++)
 		{
 			String messagePath = docs[i].get("Path");
-			results[i] = createMessageRecord(messagePath);
+			MessageRecord temp = createMessageRecord(messagePath);
+			temp.setFolder(docs[i].get("Folder"));
+			results[i] = temp;
 		}
 		return results;
 	}
 
 	private MessageRecord createMessageRecord(String messagePath) throws SAXException, IOException, ParserConfigurationException
 	{
-		MessageRecordXMLReader recordReader = new MessageRecordXMLReader(messagePath);
+		MessageRecordXMLReader recordReader = new MessageRecordXMLReader(Constants.MESSAGES_PATH + messagePath);
 		return recordReader.beginParsing();
 	}
 
@@ -104,7 +109,8 @@ public class Searcher
 		}
 		QueryParser parser = new QueryParser(DEFAULT_FIELD, new StandardAnalyzer());
 		Query query = parser.parse(buff.toString());
-		final IndexSearcher searcher = new IndexSearcher(FSDirectory.getDirectory(userName));
+		final IndexSearcher searcher = new IndexSearcher(FSDirectory.getDirectory(Constants.ACCOUNTS_PATH
+				+ userName + File.separatorChar + "indexFiles"));
 		HitCollectorWrapper wrapper = new HitCollectorWrapper(searcher, start, end);
 		searcher.search(query, wrapper);
 		int numFound = wrapper.getNumFound();
@@ -143,7 +149,7 @@ public class Searcher
 		}
 
 		public void collect(int docNum, float score)
-		{
+		{	
 			if (count >= start && count < end)
 				try {
 					docs[i++] = searcher.doc(i);
