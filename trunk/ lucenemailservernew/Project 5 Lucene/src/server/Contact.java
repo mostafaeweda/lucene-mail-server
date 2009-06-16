@@ -1,7 +1,15 @@
 package server;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
+import org.xml.sax.SAXException;
+
+
 /**
- * Class Contact
+ * *****************************************************************
+ * Class Contact represents a contact with some of his information *
+ * *****************************************************************
  */
 public class Contact {
 
@@ -11,28 +19,32 @@ public class Contact {
 
 	private int primarySent;
 	private String userName;
-	private String ID;
 	private String IP;
 	private String[] contactList;
+	private ArrayList<String> folders;
+	private boolean online;
+	private long signInTime;
 	
 	//
 	// Constructors
 	//
-	public Contact (String userName, String id, String IP) 
+	public Contact (String userName, String IP) 
 	{
 		this.userName = userName;
-		this.ID = id;
 		this.IP = IP;
+		this.online = true;
+		folders = new ArrayList<String>();
+		folders.add("Inbox");
+		folders.add("Sent");
+		folders.add("Spam");
+		signInTime = System.currentTimeMillis();
 	}
-	
-	//
-	// Methods
-	//
 
-
-	//
-	// Accessor methods
-	//
+	public Contact()
+	{
+		this.folders = new ArrayList<String>();
+		signInTime = System.currentTimeMillis();
+	}
 
 	/**
 	 * Get the value of primarySent
@@ -90,17 +102,39 @@ public class Contact {
 		return contactList;
 	}
 
-	public String getID() {
-		return ID;
-	}
-
-	public void setID(String id) {
-		ID = id;
-	}
-
-	public void setPrimarySent(int primarySent) {
-		this.primarySent = primarySent;
+	public void changeStatus() throws SAXException, IOException
+	{
+		if (online)
+		{
+			XMLContactListWriter.getInstance().writeContactList(contactList, userName);
+			String[] arr = new String[folders.size()];
+			folders.toArray(arr);
+			XMLProfileWriter.getInstance().writeFolders(userName, arr);
+		}
+		else
+		{
+			signInTime = System.currentTimeMillis();
+		}
+		online = ! online;
 	}
 	
+	public void incrPrimarySent()
+	{
+		this.primarySent++;
+	}
+	
+	public void addFolder(String name)
+	{
+		folders.add(name);
+	}
 
+	public long getSignInTime() {
+		return signInTime;
+	}
+
+	public void setSignInTime(long signInTime) {
+		this.signInTime = signInTime;
+	}
+	
+	
 }
