@@ -1,5 +1,7 @@
 package server.message;
 
+import java.util.Date;
+
 /**
  * Class Message
  */
@@ -20,14 +22,18 @@ public class Message extends MessageRecord
 	}
 	
 	public Message(int primaryKey, String subject, String sender,
-			String date)
+			String date, String folder)
 	{
-		super(primaryKey, subject, sender, date);
+		super(primaryKey, subject, sender, date, folder);
 	}
 
-	public Message(String userName, String[] recievers, String subject, Body body)
+	public Message(String sender, String[] recievers, String subject, Body body)
 	{
-		
+		this.sender = sender;
+		this.recievers = recievers;
+		this.subject = subject;
+		this.body = body;
+		this.date = new Date().toString();
 	}
 
 	/**

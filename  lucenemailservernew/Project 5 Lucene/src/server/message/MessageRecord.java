@@ -14,6 +14,7 @@ public class MessageRecord {
 	protected String subject;
 	protected String sender;
 	protected String date;
+	protected String folder;
 
 	//
 	// Constructors
@@ -24,18 +25,27 @@ public class MessageRecord {
 	}
 
 	public MessageRecord(int primaryKey, String subject, String sender,
-			String date) 
+			String date, String folder) 
 	{
 		this.primaryKey = primaryKey;
 		this.subject = subject;
 		this.sender = sender;
 		this.date = date;
+		this.folder = folder;
 	}
 
 	public MessageRecord(String substring, String url, String url2) {
 		// TODO Auto-generated constructor stub
 	}
 
+	
+	public String toString()
+	{
+		String result = "From " + sender + " with Subject : " + subject + 
+		",Date:" + date + "Folder: " + folder;
+		return result;
+	}
+	
 	/**
 	 * Set the value of primaryKey
 	 * @param newVar the new value of primaryKey
@@ -99,4 +109,14 @@ public class MessageRecord {
 	public String getDate ( ) {
 		return date;
 	}
+
+	public String getFolder() {
+		return folder;
+	}
+
+	public void setFolder(String folder) {
+		this.folder = folder;
+	}
+	
+	
 }
