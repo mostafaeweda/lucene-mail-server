@@ -34,9 +34,9 @@ public class XMLProfileWriter extends XMLwriter
 	 * @throws SAXException 
 	 * @throws IOException 
 	 */
-	public void writeProfile(Profile profile, String id) throws SAXException, IOException
+	public Contact writeProfile(Profile profile, String id) throws SAXException, IOException
 	{
-		File newUserDir = new File("server" + File.pathSeparatorChar + "accounts" + File.separatorChar 
+		File newUserDir = new File("server" + File.separatorChar + "accounts" + File.separatorChar 
 				+ profile.getUserName() + File.separatorChar + "profile");
 		newUserDir.mkdirs();
 		newUserDir = new File("server" + File.separatorChar + "accounts" + File.separatorChar 
@@ -63,6 +63,26 @@ public class XMLProfileWriter extends XMLwriter
 		writeElem(hd, "SecretQuestion", profile.getSecretQuestion(),atts);
 		writeElem(hd, "SecretAnswer", profile.getSecretAnswer(),atts);
 		hd.endElement("", "", "USER");
+		fos.close();
+		writeFolders(profile.getUserName(), new String[]{"Inbox", "Sent", "Spam"});
+		Contact result = new Contact();
+		result.setUserName(profile.getUserName());
+		return result;
+	}
+	
+	public void writeFolders(String userName, String[] folders) throws SAXException, IOException
+	{
+		File newUserDir = new File("server" + File.separatorChar + "accounts" + File.separatorChar 
+				+ userName + File.separatorChar + "profile" + File.separatorChar + "folders.xml");
+		FileOutputStream fos = new FileOutputStream(newUserDir);
+		ContentHandler hd = init(fos);
+		AttributesImpl atts = new AttributesImpl();
+		//write start tag
+		hd.startDocument();
+		hd.startElement("", "", "Folders", atts);
+		for (int i = 0; i < folders.length; i++)
+			writeElem(hd, "Folder", folders[i],atts);
+		hd.endElement("", "", "Folders");
 		fos.close();
 	}
 	
