@@ -78,11 +78,12 @@ public class SignupHandler {
 	 * @throws IOException 
 	 * @throws SAXException 
 	 */
-	public void createProfile(Profile profile ) throws SAXException, IOException
+	public Contact createProfile(Profile profile ) throws SAXException, IOException
 	{
-		XMLProfileWriter.getInstance().writeProfile(profile, "" + usersPrimaryKey);
+		Contact newContact = XMLProfileWriter.getInstance().writeProfile(profile, "" + usersPrimaryKey);
 		usersPrimaryKey++;
 		sendWelcomeMessage(profile.getUserName());
+		return newContact;
 	}
 
 
@@ -94,11 +95,11 @@ public class SignupHandler {
 	public void sendWelcomeMessage( String receiver ) throws IOException, SAXException
 	{
 		String userName = ".admin";
-		String subject = "Welcome in A3MK";
+		String subject = "Welcome in M3ak";
 		String text = "Hello " + receiver + ",\n\nwelcome in A3MK world!!!!!";
 		Body body = new Body(text);
 		Message msg = new Message(userName, new String[] {receiver}, subject, body);
-		Indexer.getInstance().addMessage(msg, new Contact(receiver, "" + usersPrimaryKey, "192.168.1.1"));
+		Indexer.getInstance().addMessage(msg, new Contact(".admin","11"), new Contact[]{new Contact(receiver, "11")});
 	}
 
 
