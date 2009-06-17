@@ -30,8 +30,8 @@ public class MessageDetailedViewXMLReader extends DefaultHandler
 		allRecievers = new ArrayList<String>();
 		buf = new StringBuffer();
 	}
-	
-	public void beginParsing()
+
+	public Message beginParsing()
 	{
 		SAXParserFactory spf = SAXParserFactory.newInstance();
 		SAXParser sp;
@@ -52,6 +52,7 @@ public class MessageDetailedViewXMLReader extends DefaultHandler
 		{
 			e1.printStackTrace();
 		}
+		return msg;
 	}
 	
 	public void startElement(String uri, String localName, String name,
