@@ -102,30 +102,33 @@ public class Controller {
 
 			@Override
 			public void run() {
-				Set<Entry<String, Contact>> pairs= onlineContacts.entrySet();
-				Iterator<Entry<String, Contact>> it = pairs.iterator();
-				while (it.hasNext())
+				while (true)
 				{
-					long now = System.currentTimeMillis();
-					Entry<String, Contact> pair = it.next();
-					if ((now - pair.getValue().getSignInTime()) >= 900000)//15 min = 900000 ms
+					Set<Entry<String, Contact>> pairs= onlineContacts.entrySet();
+					Iterator<Entry<String, Contact>> it = pairs.iterator();
+					while (it.hasNext())
 					{
-						try {
-							signOut(pair.getKey());
-						} catch (SAXException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+						long now = System.currentTimeMillis();
+						Entry<String, Contact> pair = it.next();
+						if ((now - pair.getValue().getSignInTime()) >= 900000)//15 min = 900000 ms
+						{
+							try {
+								signOut(pair.getKey());
+							} catch (SAXException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
 					}
-				}
-				try {
-					Thread.sleep(600000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					try {
+						Thread.sleep(600000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		});
