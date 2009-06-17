@@ -23,6 +23,7 @@ public class SignInApplication {
 	public void run(){
 		display = new Display();
 		shell = new Shell (display);
+		shell.setMaximized(true);
 		createContent();
 		shell.open();
 		while (!shell.isDisposed())
@@ -34,7 +35,9 @@ public class SignInApplication {
 	public void createContent(){
 		FillLayout layout = new FillLayout(1);
 		shell.setLayout(layout);
-		Composite composite = new Composite(shell,SWT.NONE);
+		shell.setBackgroundMode(SWT.INHERIT_DEFAULT);
+		shell.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
+		final Composite composite = new Composite(shell,SWT.NONE);
 		composite.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
 		FormLayout formLayout = new FormLayout();
 		composite.setLayout(formLayout);
@@ -75,7 +78,9 @@ public class SignInApplication {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
+				composite.dispose();
+				SignUpApplication.getInstance().createContent(shell);
+				shell.layout();
 				
 			}
 			

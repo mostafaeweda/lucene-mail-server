@@ -24,10 +24,14 @@ import org.eclipse.swt.widgets.Text;
 
 public class SignUpApplication {
 
-	Display display;
-	Shell shell;
-	Color color;
-	Font font;
+	private SignUpApplication(){}
+	
+	private Display display;
+	private Color color;
+	private Font font;
+	private static SignUpApplication instance;
+	
+	
 	final String GENDER_ARRAY[] = { "-SelectOne-", "Male", "Female" };
 	final String BRITHDAY_ARRAY[] = { "-SelectMonth-", "January", "Februaray",
 			"Marth", "April", "May", "June", "July", "Augaust", "September",
@@ -41,25 +45,17 @@ public class SignUpApplication {
 
 		color = new Color(display, new RGB(128, 0, 128));
 		font = new Font(display, "Arial", 12, SWT.BOLD);
+		display = Display.getCurrent();
 	}
-
-	public void run() {
-		display = new Display();
-		shell = new Shell(display);
-		shell.setMaximized(true);
-		shell.setBackgroundMode(SWT.INHERIT_DEFAULT);
-		shell.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
-		createContent();
-		shell.open();
-		while (!shell.isDisposed())
-			if (!display.readAndDispatch())
-				display.sleep();
-		display.dispose();
+	
+	public static SignUpApplication getInstance(){
+		if(instance == null)
+			instance = new SignUpApplication();
+		return instance;
 	}
-
-	private void createContent() {
+	
+	public void createContent(Shell shell) {
 		init();
-		shell.setLayout(new FillLayout(1));
 		Composite composite = new Composite(shell, SWT.None);
 		composite.setLayout(new FormLayout());
 		Composite upperComposite = new Composite(composite, SWT.None);
@@ -318,8 +314,5 @@ public class SignUpApplication {
 		
 	}
 
-	public static void main(String[] args) {
-		new SignUpApplication().run();
-	}
 
 }
