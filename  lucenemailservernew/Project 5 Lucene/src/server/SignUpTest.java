@@ -4,13 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.xml.sax.SAXException;
-
 
 public class SignUpTest 
 {
 	static SignupHandler hd;
-	public static void main(String[] args) throws IOException, SAXException 
+	public static void main(String[] args) throws Exception 
 	{
 		new Controller();
 		hd = SignupHandler.getInstance();

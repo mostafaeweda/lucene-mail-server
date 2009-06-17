@@ -14,10 +14,10 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.FSDirectory;
-import org.xml.sax.SAXException;
 
 import server.message.Message;
 import server.message.MessageWriter;
+import server.parser.ExtensionHandler;
 
 
 /**
@@ -89,24 +89,58 @@ public class Indexer {
 	/**
 	 * @param        message
 	 * @param        sender
-	 * @throws SAXException 
-	 * @throws IOException 
+	 * @throws Exception 
 	 */
-	public void addMessage( Message message, Contact sender, Contact[] receivers ) throws IOException, SAXException
+	public void addMessage( Message message, Contact sender, Contact[] receivers ) throws Exception
 	{
 		MessageWriter.getInstance().copyMessage(message, sender);
+		String[] attachNames = MessageWriter.getInstance().copyAttachment(sender, receivers.length + 1);
 		message.setPrimaryKey(sender.getPrimarySent());
 		indexMessage(message, sender, "Sent");
-		for (Contact contact : receivers) 
+		String str = "" + message.getPrimaryKey();
+		for(int j = str.length(); j < Constants.PRIMARY_KEY_LENGTH; j++)
+			str = "0" + str;
+		String primary = sender.getUserName() + "." + str;
+		if (attachNames == null)
 		{
-			indexMessage(message, contact, "Inbox");
+			for (Contact contact : receivers) 
+			{
+				indexMessage(message, contact, "Inbox");
+			}	
+		}
+		else
+		{
+			indexAttachments(primary, attachNames, sender);
+			for (Contact contact : receivers) 
+			{
+				indexMessage(message, contact, "Inbox");
+				indexAttachments(primary, attachNames, contact);
+			}
 		}
 	}
 
 
-	public void indexMessage(Message message, Contact sender, String folder) throws CorruptIndexException, IOException {
-		File userIndex = new File("server" + File.separator + "accounts"
-				+ File.separator + sender.getUserName() + File.separator
+	private void indexAttachments(String primaryKey, String[] attachNames,
+			Contact contact) throws Exception 
+	{
+		File userIndex = new File(Constants.ACCOUNTS_PATH + contact.getUserName() + File.separatorChar
+				+ "indexFiles");
+		IndexWriter indexWriter = new IndexWriter(FSDirectory
+				.getDirectory(userIndex), new StandardAnalyzer(), false,
+				IndexWriter.MaxFieldLength.UNLIMITED);
+		for (String attachmentName : attachNames) 
+		{
+			ExtensionHandler handler = new ExtensionHandler();
+			Document doc = handler.parse(Constants.Attachments_PATH + attachmentName);
+			//name of the msg
+			doc.add(new Field("PrimaryKey", primaryKey, Field.Store.YES, Field.Index.NOT_ANALYZED));
+			indexWriter.addDocument(doc);
+		}
+	}
+
+	public void indexMessage(Message message, Contact sender, String folder) throws CorruptIndexException, IOException
+	{
+		File userIndex = new File(Constants.ACCOUNTS_PATH + sender.getUserName() + File.separatorChar
 				+ "indexFiles");
 		boolean create = false;
 		if (!(userIndex.exists())) {
