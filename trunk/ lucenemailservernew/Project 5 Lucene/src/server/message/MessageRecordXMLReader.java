@@ -21,12 +21,10 @@ public class MessageRecordXMLReader extends DefaultHandler
 	public MessageRecordXMLReader(String url)
 	{
 		this.url = url;
-		this.record = new MessageRecord(
-				url.substring(0, url.lastIndexOf('.')).substring(url.lastIndexOf('.'))
-				, url, url);
+		this.record = new MessageRecord();
 		counter = 0;
 	}
-	
+
 	public MessageRecord beginParsing()
 	{
 		SAXParserFactory spf = SAXParserFactory.newInstance();

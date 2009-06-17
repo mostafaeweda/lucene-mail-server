@@ -1,16 +1,19 @@
 package server.message;
 
+import java.util.ArrayList;
+
 
 
 /**
  * Class MessageRecord
  */
-public class MessageRecord {
-
+public class MessageRecord
+{
 	//
 	// Fields
 	//
 	protected int primaryKey;
+	protected ArrayList<String> attachmentNames;
 	protected String subject;
 	protected String sender;
 	protected String date;
@@ -20,8 +23,8 @@ public class MessageRecord {
 	// Constructors
 	//
 	public MessageRecord() 
-	{ 
-		
+	{
+		attachmentNames = new ArrayList<String>();
 	}
 
 	public MessageRecord(int primaryKey, String subject, String sender,
@@ -32,13 +35,9 @@ public class MessageRecord {
 		this.sender = sender;
 		this.date = date;
 		this.folder = folder;
+		this.attachmentNames = new ArrayList<String>();
 	}
 
-	public MessageRecord(String substring, String url, String url2) {
-		// TODO Auto-generated constructor stub
-	}
-
-	
 	public String toString()
 	{
 		String result = "From " + sender + " with Subject : " + subject + 
@@ -50,7 +49,8 @@ public class MessageRecord {
 	 * Set the value of primaryKey
 	 * @param newVar the new value of primaryKey
 	 */
-	public void setPrimaryKey ( int newVar ) {
+	public void setPrimaryKey ( int newVar )
+	{
 		primaryKey = newVar;
 	}
 
@@ -58,7 +58,8 @@ public class MessageRecord {
 	 * Get the value of primaryKey
 	 * @return the value of primaryKey
 	 */
-	public int getPrimaryKey ( ) {
+	public int getPrimaryKey ( )
+	{
 		return primaryKey;
 	}
 
@@ -116,6 +117,15 @@ public class MessageRecord {
 
 	public void setFolder(String folder) {
 		this.folder = folder;
+	}
+	
+	public void attach(String attachName)
+	{
+		attachmentNames.add(attachName);
+	}
+
+	public ArrayList<String> getAttachmentNames() {
+		return attachmentNames;
 	}
 	
 	
