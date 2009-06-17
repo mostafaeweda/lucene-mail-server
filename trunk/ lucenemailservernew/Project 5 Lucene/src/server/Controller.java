@@ -1,17 +1,24 @@
 package server;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Properties;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.store.FSDirectory;
 import org.xml.sax.SAXException;
 
 import server.message.Body;
 import server.message.Message;
+import server.message.MessageDetailedViewXMLReader;
 import server.message.MessageRecord;
 import server.message.MessageWriter;
 
@@ -19,8 +26,7 @@ import server.message.MessageWriter;
 /**
  * Class Controller
  */
-public class Controller
-{
+public class Controller {
 
 	//
 	// Fields
@@ -48,13 +54,14 @@ public class Controller
 	public void SignIn(String userName, String password, String IP) throws Exception
 	{
 		Contact contact = SignInHandler.getInstance().signIn(userName, password, IP);
+		contact.setSignInTime(System.currentTimeMillis());
 		onlineContacts.put(IP, contact);
 	}
 	
 	public void newMessage(String IP)
 	{
 		Contact sender = onlineContacts.get(IP);
-		sender.newMessage();
+		sender.setSignInTime(System.currentTimeMillis());
 	}
 	
 	public void attach(String IP, File path) throws IOException
@@ -68,10 +75,35 @@ public class Controller
 		MessageWriter.getInstance().copyFiles(path, fileOut);
 	}
 	
+	public void cancelAttach(String IP, String attachName)
+	{
+		Contact sender = onlineContacts.get(IP);
+		File attachment = new File(Constants.ACCOUNTS_PATH + sender.getUserName() 
+				+ File.separatorChar + attachName);
+		File parent = attachment.getParentFile();
+		attachment.delete();
+		if (parent.list().length == 0)
+			parent.delete();
+		
+	}
+
+	public void deleteMessages(String IP, MessageRecord[] messages) throws CorruptIndexException, IOException
+	{
+		Contact con = onlineContacts.get(IP);
+		Indexer.getInstance().deleteMessage(con.getUserName(),
+				messages);
+		final IndexWriter w = new IndexWriter(FSDirectory.getDirectory(Constants.ACCOUNTS_PATH
+				+ con.getUserName() + File.separatorChar + "indexFiles"), new StandardAnalyzer(), 
+				false, IndexWriter.MaxFieldLength.UNLIMITED);
+		w.optimize();
+		w.close();
+	}
+
 	public void sendMessage(String IP, String[] receivers, String subject, Body body) throws Exception
 	{
 		Contact sender = onlineContacts.get(IP);
 		Contact[] rec = new Contact[receivers.length];
+		sender.setSignInTime(System.currentTimeMillis());
 		for (int i = 0; i < receivers.length; i++)
 		{
 			rec[i] = new Contact();
@@ -95,7 +127,7 @@ public class Controller
 		onlineContacts.put(IP, newContact);
 	}
 	
-	public void search(String IP, String query, int start, int end) throws Exception
+	public MessageRecord[] search(String IP, String query, int start, int end) throws Exception
 	{
 		Contact con = onlineContacts.get(IP);
 		con.setSignInTime(System.currentTimeMillis());
@@ -104,15 +136,22 @@ public class Controller
 		{
 			System.out.println(messages[i].toString());
 		}
+		return messages;
 	}
 	
-	public void moveMessage(String IP, Message msg, String to) throws CorruptIndexException, IOException
+	public void moveMessage(String IP, MessageRecord[] msgs, String to) throws CorruptIndexException, IOException
 	{
 		Contact sender = onlineContacts.get(IP);
 		sender.setSignInTime(System.currentTimeMillis());
-		Indexer.getInstance().deleteMessage(sender.getUserName(), 
-				new String[]{msg.getSender()}, new int[]{msg.getPrimaryKey()});
-		Indexer.getInstance().indexMessage(msg, sender, to);
+		Indexer.getInstance().deleteMessage(sender.getUserName(), msgs);
+		for (MessageRecord messageRecord : msgs)
+		{
+			MessageDetailedViewXMLReader reader = new MessageDetailedViewXMLReader(
+				messageRecord.getSender() + "." + messageRecord.getPrimaryKey()
+				 + ".xml");
+			Message msg = reader.beginParsing();
+			Indexer.getInstance().indexMessage(msg, sender, to);
+		}
 	}
 	
 	public void checkIdle()
@@ -155,7 +194,12 @@ public class Controller
 	
 	public void signOut(String IP) throws SAXException, IOException
 	{
-		onlineContacts.get(IP).changeStatus();
+		Contact con = onlineContacts.get(IP);
+		con.changeStatus();
+		Properties props = new Properties();
+		props.setProperty("Sent", "" + con.getPrimarySent());
+		props.storeToXML(new FileOutputStream(Constants.ACCOUNTS_PATH
+				+ "sent.xml"), "");
 		onlineContacts.remove(IP);
 	}
 	
@@ -175,14 +219,31 @@ public class Controller
 	{
 		return onlineContacts;
 	}
-
+	
+	public void close() throws SAXException, IOException
+	{
+		Collection<Contact> contacts = onlineContacts.values();
+		for (Contact con : contacts) {
+			con.changeStatus();
+			Properties props = new Properties();
+			props.setProperty("Sent", "" + con.getPrimarySent());
+			props.storeToXML(new FileOutputStream(Constants.ACCOUNTS_PATH
+					+ "sent.xml"), "");
+		}
+		onlineContacts.clear();
+	}
 	
 	public static void main(String[] args) throws Exception 
 	{
 		Controller cont = new Controller();
 		cont.SignIn("1", "1", "12");
-		cont.sendMessage("12", new String[]{"2"}, "Hiiii!!!", new Body("3weda and morsy and yasser and 3ebso and kimo :p"));
+		cont.sendMessage("12", new String[]{"2"}, "3weda!!!", new Body("3weda yasser and 3ebso and kimo :p"));
+		cont.sendMessage("12", new String[]{"2"}, "7mraaa!!!", new Body("7mra ya 3weda :p"));
+		cont.sendMessage("12", new String[]{"2"}, "hii", new Body("ezayak ya meshmesh :p"));
 		cont.SignIn("2", "2", "13");
-		cont.search("13", "kimo", 0, 20);
+		MessageRecord[] record = cont.search("13", "kimo", 0, 20);
+		System.out.println("-------------------------------------------------");
+		cont.deleteMessages("13", record);
+		record = cont.search("13", "3weda", 0, 20);
 	}
 }
