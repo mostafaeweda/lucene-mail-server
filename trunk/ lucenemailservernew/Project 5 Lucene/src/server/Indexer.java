@@ -1,7 +1,12 @@
 package server;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
@@ -16,6 +21,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.store.FSDirectory;
 
 import server.message.Message;
+import server.message.MessageRecord;
 import server.message.MessageWriter;
 import server.parser.ExtensionHandler;
 
@@ -43,20 +49,42 @@ public class Indexer {
 	 * @throws IOException 
 	 * @throws CorruptIndexException 
 	 */
-	public void deleteMessage( String userName, String[] senders, int[] primarykeys ) throws CorruptIndexException, IOException
+	public void deleteMessage( String userName, MessageRecord[] messages) throws CorruptIndexException, IOException
 	{
 		IndexReader reader = IndexReader.open(FSDirectory.getDirectory(Constants.ACCOUNTS_PATH+userName+File.separatorChar+"indexFiles"));
-		for(int i = 0, n = primarykeys.length; i < n; i++)
+		for(int i = 0, n = messages.length; i < n; i++)
 		{
-			String str = "" + primarykeys[i];
+			String str = "" + messages[i].getPrimaryKey();
 			for(int j = str.length(); j < Constants.PRIMARY_KEY_LENGTH; j++)
 				str = "0" + str;
-			Term wanted = new Term("PrimaryKey", senders[i]+ "." + str);
-			updateMessagePointers(Constants.MESSAGES_PATH + senders[i]+ "." + str + ".xml",-1);
+			Term wanted = new Term("PrimaryKey", messages[i].getSender() + "." + str);
+			updateMessagePointers(Constants.MESSAGES_PATH + messages[i].getSender()
+					+ "." + str + ".xml",-1);
+			for (String attachment : messages[i].getAttachmentNames())
+			{
+				updateAttachmentPointer(attachment, -1);
+			}
 			reader.deleteDocuments(wanted);
 		}
+		reader.close();
 	}
 
+
+	private void updateAttachmentPointer(String attachment, int i) throws IOException
+	{
+		BufferedReader in = new BufferedReader(new FileReader(attachment + ".inf"));
+		int wanted = Integer.parseInt(in.readLine()) + i;
+		in.close();
+		if (wanted == 0)
+		{
+			new File(attachment).delete();
+			new File(attachment + ".inf").delete();
+			return;
+		}
+		PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(attachment + ".inf")));
+		writer.println(wanted);
+		writer.close();
+	}
 
 	private void updateMessagePointers(String path, int num) throws IOException
 	{
@@ -93,8 +121,8 @@ public class Indexer {
 	 */
 	public void addMessage( Message message, Contact sender, Contact[] receivers ) throws Exception
 	{
-		MessageWriter.getInstance().copyMessage(message, sender);
 		String[] attachNames = MessageWriter.getInstance().copyAttachment(sender, receivers.length + 1);
+		MessageWriter.getInstance().copyMessage(message, attachNames, sender);
 		message.setPrimaryKey(sender.getPrimarySent());
 		indexMessage(message, sender, "Sent");
 		String str = "" + message.getPrimaryKey();
@@ -134,8 +162,12 @@ public class Indexer {
 			Document doc = handler.parse(Constants.Attachments_PATH + attachmentName);
 			//name of the msg
 			doc.add(new Field("PrimaryKey", primaryKey, Field.Store.YES, Field.Index.NOT_ANALYZED));
+			//name of the attachment file in attachments folder
+			doc.add(new Field("AttachmentName", attachmentName, Field.Store.YES, Field.Index.NOT_ANALYZED));
 			indexWriter.addDocument(doc);
 		}
+		indexWriter.optimize();
+		indexWriter.close();
 	}
 
 	public void indexMessage(Message message, Contact sender, String folder) throws CorruptIndexException, IOException
@@ -159,7 +191,8 @@ public class Indexer {
 				Field.Index.ANALYZED));
 		document.add(new Field("Date", message.getDate(), Field.Store.YES,
 				Field.Index.NOT_ANALYZED));
-		document.add(new Field("PrimaryKey", sender.getUserName() + "." + sender.getPrimarySent(), Field.Store.YES,
+		String primary = message.getSender() + "." + str;
+		document.add(new Field("PrimaryKey", primary, Field.Store.YES,
 				Field.Index.NOT_ANALYZED));
 		document.add(new Field("Folder", folder, Field.Store.YES,
 				Field.Index.NOT_ANALYZED));

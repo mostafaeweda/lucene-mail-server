@@ -16,7 +16,7 @@ public class SignUpTest
 		if (temp != null)
 			hd.createProfile(temp);
 	}
-	
+
 	public static Profile getProfile() throws IOException
 	{
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
