@@ -24,7 +24,7 @@ public abstract class XMLwriter {
 		XMLSerializer serializer = new XMLSerializer(fos,of);
 		//get content handler to handle tags in XML doc
 		ContentHandler hd = serializer.asContentHandler();
-		return hd;	
+		return hd;
 	}
 	
 	protected void writeElem(ContentHandler hd, String tag, String characters, AttributesImpl atts) throws SAXException
