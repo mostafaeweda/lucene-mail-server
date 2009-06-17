@@ -97,7 +97,7 @@ public class MessageDetailedViewXMLReader extends DefaultHandler
 				}
 				else if("body".equalsIgnoreCase(name))
 				{
-					msg.setBody(new Body(buf.toString()));
+					msg.setBody(new Body(buf.toString(), null));
 					counter++;
 				}
 		}
