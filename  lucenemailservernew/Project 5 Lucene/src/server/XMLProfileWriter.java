@@ -27,6 +27,7 @@ public class XMLProfileWriter extends XMLwriter
 			instance = new XMLProfileWriter();
 		return instance;
 	}
+
 	
 	/**
 	 * write the profile informations in an XML File
