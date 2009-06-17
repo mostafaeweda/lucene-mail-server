@@ -10,7 +10,7 @@ public class SignUpTest
 	static SignupHandler hd;
 	public static void main(String[] args) throws Exception 
 	{
-		new Controller();
+		Controller.getInstance();
 		hd = SignupHandler.getInstance();
 		Profile temp = getProfile();
 		if (temp != null)

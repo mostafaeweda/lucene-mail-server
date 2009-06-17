@@ -34,8 +34,10 @@ public class Controller {
 
 	private Hashtable<String, Contact> onlineContacts;
 	
+	private static Controller instance;
 	
-	public Controller () 
+	
+	private Controller () 
 	{ 
 		onlineContacts = new Hashtable<String, Contact>();
 		File serverDir = new File(Constants.SERVER_PATH);//represent server directory
@@ -49,6 +51,13 @@ public class Controller {
 			messagesDir.mkdir();
 			attachmentsDir.mkdir();
 		}
+	}
+	
+	public static Controller getInstance()
+	{
+		if (instance == null)
+			instance = new Controller();
+		return instance;
 	}
 	
 	public void SignIn(String userName, String password, String IP) throws Exception
