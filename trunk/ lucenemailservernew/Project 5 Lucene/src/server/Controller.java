@@ -19,7 +19,8 @@ import server.message.MessageWriter;
 /**
  * Class Controller
  */
-public class Controller {
+public class Controller
+{
 
 	//
 	// Fields
