@@ -60,11 +60,14 @@ public class Controller {
 		return instance;
 	}
 	
-	public void SignIn(String userName, String password, String IP) throws Exception
+	public boolean SignIn(String userName, String password, String IP) throws Exception
 	{
 		Contact contact = SignInHandler.getInstance().signIn(userName, password, IP);
+		if(contact == null)
+			return false;
 		contact.setSignInTime(System.currentTimeMillis());
 		onlineContacts.put(IP, contact);
+		return true;
 	}
 	
 	public void newMessage(String IP)
