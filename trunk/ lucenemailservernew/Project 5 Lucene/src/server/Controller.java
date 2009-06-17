@@ -13,6 +13,7 @@ import org.xml.sax.SAXException;
 import server.message.Body;
 import server.message.Message;
 import server.message.MessageRecord;
+import server.message.MessageWriter;
 
 
 /**
@@ -49,7 +50,24 @@ public class Controller {
 		onlineContacts.put(IP, contact);
 	}
 	
-	public void sendMessage(String IP, String[] receivers, String subject, Body body) throws IOException, SAXException
+	public void newMessage(String IP)
+	{
+		Contact sender = onlineContacts.get(IP);
+		sender.newMessage();
+	}
+	
+	public void attach(String IP, File path) throws IOException
+	{
+		Contact sender = onlineContacts.get(IP);
+		File fileOut = new File(Constants.ACCOUNTS_PATH + sender.getUserName() 
+				+ File.separatorChar + "tempAttachment");
+		fileOut.mkdirs();
+		fileOut = new File(fileOut.getAbsolutePath() + File.separatorChar + sender.getUserName()
+				 + "." + sender.getPrimarySent() + "." + path.getName());
+		MessageWriter.getInstance().copyFiles(path, fileOut);
+	}
+	
+	public void sendMessage(String IP, String[] receivers, String subject, Body body) throws Exception
 	{
 		Contact sender = onlineContacts.get(IP);
 		Contact[] rec = new Contact[receivers.length];
@@ -68,7 +86,7 @@ public class Controller {
 	}
 	
 	public void signUp(String IP, String userName, String password, String first, String last,
-			int gender, String birth, int secretQuestion, String secretAns) throws SAXException, IOException
+			int gender, String birth, int secretQuestion, String secretAns) throws Exception
 	{
 		Contact newContact = SignupHandler.getInstance().createProfile(new Profile(userName, password, first, last,
 				gender, birth, secretQuestion, secretAns));
@@ -104,29 +122,28 @@ public class Controller {
 			public void run() {
 				while (true)
 				{
-					Set<Entry<String, Contact>> pairs= onlineContacts.entrySet();
-					Iterator<Entry<String, Contact>> it = pairs.iterator();
-					while (it.hasNext())
-					{
-						long now = System.currentTimeMillis();
-						Entry<String, Contact> pair = it.next();
-						if ((now - pair.getValue().getSignInTime()) >= 900000)//15 min = 900000 ms
+					synchronized (onlineContacts) {
+						Set<Entry<String, Contact>> pairs= onlineContacts.entrySet();
+						Iterator<Entry<String, Contact>> it = pairs.iterator();
+						while (it.hasNext())
 						{
-							try {
-								signOut(pair.getKey());
-							} catch (SAXException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+							long now = System.currentTimeMillis();
+							Entry<String, Contact> pair = it.next();
+							if ((now - pair.getValue().getSignInTime()) >= 900000)//15 min = 900000 ms
+							{
+								try {
+									signOut(pair.getKey());
+								} catch (SAXException e) {
+									e.printStackTrace();
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
 							}
-						}
+						}						
 					}
 					try {
 						Thread.sleep(600000);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}

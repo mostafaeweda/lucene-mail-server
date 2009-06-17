@@ -1,9 +1,6 @@
 package server;
 
 import java.io.File;
-import java.io.IOException;
-
-import org.xml.sax.SAXException;
 
 import server.message.Body;
 import server.message.Message;
@@ -75,10 +72,9 @@ public class SignupHandler {
 	/**
 	 * create a profile on the database with user info
 	 * @param profile user's info
-	 * @throws IOException 
-	 * @throws SAXException 
+	 * @throws Exception 
 	 */
-	public Contact createProfile(Profile profile ) throws SAXException, IOException
+	public Contact createProfile(Profile profile ) throws Exception
 	{
 		Contact newContact = XMLProfileWriter.getInstance().writeProfile(profile, "" + usersPrimaryKey);
 		usersPrimaryKey++;
@@ -89,10 +85,9 @@ public class SignupHandler {
 
 	/**
 	 * @param reciever the new user to send welcome message
-	 * @throws SAXException 
-	 * @throws IOException 
+	 * @throws Exception 
 	 */
-	public void sendWelcomeMessage( String receiver ) throws IOException, SAXException
+	public void sendWelcomeMessage( String receiver ) throws Exception
 	{
 		String userName = ".admin";
 		String subject = "Welcome in M3ak";

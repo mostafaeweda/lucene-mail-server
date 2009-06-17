@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import org.xml.sax.SAXException;
 
+import server.message.Message;
+
 
 /**
  * *****************************************************************
@@ -24,6 +26,7 @@ public class Contact {
 	private ArrayList<String> folders;
 	private boolean online;
 	private long signInTime;
+	public Message draft;
 	
 	//
 	// Constructors
@@ -136,5 +139,8 @@ public class Contact {
 		this.signInTime = signInTime;
 	}
 	
-	
+	public void newMessage()
+	{
+		draft = new Message();
+	}
 }
