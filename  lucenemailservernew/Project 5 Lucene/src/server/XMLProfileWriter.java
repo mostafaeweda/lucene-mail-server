@@ -3,6 +3,7 @@ package server;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Properties;
 
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
@@ -68,6 +69,10 @@ public class XMLProfileWriter extends XMLwriter
 		writeFolders(profile.getUserName(), new String[]{"Inbox", "Sent", "Spam"});
 		Contact result = new Contact();
 		result.setUserName(profile.getUserName());
+		Properties props = new Properties();
+		props.setProperty("Sent", "0");
+		props.storeToXML(new FileOutputStream(Constants.ACCOUNTS_PATH +
+				profile.getUserName() + File.separatorChar + "sent.xml"), "");
 		return result;
 	}
 	

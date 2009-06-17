@@ -54,14 +54,13 @@ public class Searcher
 	// Other methods
 	//
 
-	/**
-	 * TODO To handle all 
+	/** 
 	 * @return       MessageRecord
 	 * @param        query
 	 * @throws Exception
 	 */
 	public MessageRecord[] search(String userName, String queryString, final int start, final int end) throws Exception
-	{
+	{	
 		int numberOfResults = end - start;
 		QueryParser parser = new QueryParser(DEFAULT_FIELD, new StandardAnalyzer());
 		Query query = parser.parse(queryString);
@@ -69,6 +68,9 @@ public class Searcher
 				+ userName + File.separatorChar + "indexFiles"));
 		HitCollectorWrapper wrapper = new HitCollectorWrapper(searcher, start, end);
 		searcher.search(query, wrapper);
+//		Hits hits = searcher.search(query);
+//		for (int i = 0; i < hits.length(); i ++)
+//			System.out.println(hits.doc(i));
 		int numFound = wrapper.getNumFound();
 		if (numFound == 0)
 			throw new Exception("No results to preview");
@@ -88,7 +90,10 @@ public class Searcher
 	private MessageRecord createMessageRecord(String messagePath) throws SAXException, IOException, ParserConfigurationException
 	{
 		MessageRecordXMLReader recordReader = new MessageRecordXMLReader(Constants.MESSAGES_PATH + messagePath);
-		return recordReader.beginParsing();
+		MessageRecord record = recordReader.beginParsing();
+		String s = messagePath.substring(0, messagePath.lastIndexOf('.'));
+		record.setPrimaryKey(Integer.parseInt(s.substring(s.lastIndexOf('.') + 1)));
+		return record;
 	}
 
 	/**

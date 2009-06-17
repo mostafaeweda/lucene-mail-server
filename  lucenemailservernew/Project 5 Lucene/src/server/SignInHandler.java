@@ -1,7 +1,9 @@
 package server;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -93,6 +95,10 @@ public class SignInHandler
 			list.toArray(listArr);
 			result.setContactList(listArr);
 		}
+		Properties props = new Properties();
+		props.loadFromXML(new FileInputStream(Constants.ACCOUNTS_PATH 
+				+ userName + File.separatorChar + "sent.xml"));
+		result.setPrimarySent(Integer.parseInt(props.getProperty("Sent")));
 		result.changeStatus();
 		return result;
 	}
