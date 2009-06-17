@@ -44,7 +44,7 @@ public class MessageWriter extends XMLwriter {
 	 * @throws IOException 
 	 * @throws SAXException 
 	 */
-	public File copyMessage( Message message, Contact contact) throws IOException, SAXException
+	public File copyMessage( Message message, String[] attachments, Contact contact) throws IOException, SAXException
 	{
 		contact.incrPrimarySent();
 		String primary =contact.getPrimarySent() + "";
@@ -71,6 +71,15 @@ public class MessageWriter extends XMLwriter {
 		}
 		hd.endElement("","","Receivers");
 		message.getBody().writeXML(hd);
+		hd.startElement("","","Attachments",atts);
+		if (attachments != null)
+			for (int i = 0; i < attachments.length; i++)
+			{
+				hd.startElement("", "", "Attachment", atts);
+				hd.characters(attachments[i].toCharArray(), 0, recievers[i].length());
+				hd.endElement("", "", "Attachment");
+			}
+		hd.endElement("","","Attachments");
 		String ptCount = "";
 		for (int i = 0; i < Constants.PRIMARY_KEY_LENGTH; i++)
 			ptCount += "0";
