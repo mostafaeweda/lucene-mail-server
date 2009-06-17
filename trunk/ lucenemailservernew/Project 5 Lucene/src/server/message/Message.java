@@ -12,7 +12,7 @@ public class Message extends MessageRecord
 	//
 	private String[] recievers;
 	private Body body;
-	
+
 	//
 	// Constructors
 	//
