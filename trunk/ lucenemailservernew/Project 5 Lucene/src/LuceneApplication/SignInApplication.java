@@ -92,7 +92,7 @@ public class SignInApplication {
 					 String userName = userNameText.getText();
 					 String password = passWordText.getText();
 					 try {
-						boolean isSignIn = Controller.getInstance().SignIn(userName, password, InetAddress.getLocalHost().getCanonicalHostName());
+						boolean isSignIn = Controller.getInstance().signIn(userName, password, InetAddress.getLocalHost().getCanonicalHostName());
 						if(isSignIn){
 							composite.dispose();
 							MailApplication.getInstance(userName).createContent(shell);
