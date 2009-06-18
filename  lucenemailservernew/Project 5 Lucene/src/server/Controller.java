@@ -22,7 +22,6 @@ import server.message.MessageDetailedViewXMLReader;
 import server.message.MessageRecord;
 import server.message.MessageWriter;
 
-
 /**
  * Class Controller
  */
@@ -33,7 +32,7 @@ public class Controller {
 	//
 
 	private Hashtable<String, Contact> onlineContacts;
-	
+
 	private static Controller controller;
 
 	private Controller ()
@@ -254,7 +253,12 @@ public void addContact(String IP, String name)
 		}
 		onlineContacts.clear();
 	}
-	
+
+	public void forwared(String IP, MessageRecord msgRec)
+	{
+		MessageWriter.getInstance().forward(onlineContacts.get(IP), msgRec);
+	}
+
 	public static void main(String[] args) throws Exception 
 	{
 		Controller cont = getInstance();

@@ -2,17 +2,25 @@ package server;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Date;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.HitCollector;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.ScoreDocComparator;
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.SortComparatorSource;
+import org.apache.lucene.search.SortField;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.FSDirectory;
 import org.xml.sax.SAXException;
@@ -69,7 +77,51 @@ public class Searcher
 		final IndexSearcher searcher = new IndexSearcher(FSDirectory.getDirectory(Constants.ACCOUNTS_PATH
 				+ userName + File.separatorChar + "indexFiles"));
 //		HitCollectorWrapper wrapper = new HitCollectorWrapper(searcher, start, end);
-		TopDocs docs = searcher.search(query, 20);
+		TopDocs docs = searcher.search(query, null, 20, new Sort(new SortField("Date", new SortComparatorSource()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public ScoreDocComparator newComparator(IndexReader arg0,
+					String arg1) throws IOException
+			{
+				return new ScoreDocComparator()
+				{
+					@Override
+					public int compare(ScoreDoc scoreDoc1, ScoreDoc scoreDoc2) 
+					{
+						try {
+							Document doc1 = searcher.doc(scoreDoc1.doc);
+							Document doc2 = searcher.doc(scoreDoc2.doc);
+							Date date1 = DateFormat.getInstance().parse((doc1.get("Date")));
+							Date date2 = DateFormat.getInstance().parse((doc2.get("Date")));
+							return date1.compareTo(date2);
+						} catch (CorruptIndexException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
+						} catch (ParseException e) {
+							e.printStackTrace();
+						}
+						return 0;
+					}
+
+					@Override
+					public int sortType()
+					{
+						return SortField.CUSTOM;
+					}
+
+					@SuppressWarnings("unchecked")
+					@Override
+					public Comparable sortValue(ScoreDoc arg0) {
+						return null;
+					}
+					
+				};
+			}
+			
+		}, true)));
 //		Hits hits = searcher.search(query);
 //		for (int i = 0; i < hits.length(); i ++)
 //			System.out.println(hits.doc(i));
