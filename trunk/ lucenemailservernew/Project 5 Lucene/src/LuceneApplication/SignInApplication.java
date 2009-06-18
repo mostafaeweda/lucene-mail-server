@@ -1,8 +1,11 @@
 package LuceneApplication;
 
+import java.net.InetAddress;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
@@ -16,10 +19,21 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import server.Controller;
+
 
 public class SignInApplication {
 	Display display;
 	Shell shell;
+	private Composite composite;
+	private static SignInApplication instance;
+	private SignInApplication(){}
+	
+	public static SignInApplication getInstance(){
+		if(instance == null)
+			instance = new SignInApplication();
+		return instance;
+	}
 	public void run(){
 		display = new Display();
 		shell = new Shell (display);
@@ -37,17 +51,27 @@ public class SignInApplication {
 		shell.setLayout(layout);
 		shell.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		shell.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
-		final Composite composite = new Composite(shell,SWT.NONE);
+		composite = new Composite(shell,SWT.NONE);
 		composite.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
 		FormLayout formLayout = new FormLayout();
 		composite.setLayout(formLayout);
 		final Composite signInComposite = new Composite(composite,SWT.BORDER);
 		signInComposite.setLayout(new GridLayout(2,false));
 		FormData data = new FormData();
-		
-		data.right = new FormAttachment(3,4,5);
-		data.top = new FormAttachment(20);
+		data.right = new FormAttachment(3,4,10);
+		data.top = new FormAttachment(55);
 		signInComposite.setLayoutData(data);
+		
+		
+		
+		Label label = new Label (composite,SWT.None);
+		data = new FormData();
+		data.right = new FormAttachment(3,4,5);
+		data.top = new FormAttachment(30);
+		data.bottom = new FormAttachment(signInComposite);
+		label.setLayoutData(data);
+		label.setImage(new Image(display,"m3akLogo.jpg"));
+		
 		Label userNameLabel = new Label(signInComposite,SWT.NONE);
 		userNameLabel.setText("UserName : ");
 		final Text userNameText  = new Text(signInComposite,SWT.BORDER);
@@ -63,9 +87,20 @@ public class SignInApplication {
 		
 		signInButton.addSelectionListener(new SelectionAdapter(){
 			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				// TODO Auto-generated method stub
-				
+			public void widgetSelected(SelectionEvent e) {
+	 
+					 String userName = userNameText.getText();
+					 String password = passWordText.getText();
+					 try {
+						boolean isSignIn = Controller.getInstance().SignIn(userName, password, InetAddress.getLocalHost().getCanonicalHostName());
+						if(isSignIn){
+							composite.dispose();
+							MailApplication.getInstance(userName).createContent(shell);
+							shell.layout();
+						}
+					} catch (Exception e1) {
+					
+					}		
 			}
 			
 		});
@@ -79,7 +114,7 @@ public class SignInApplication {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				composite.dispose();
-				SignUpApplication.getInstance().createContent(shell);
+				composite = SignUpApplication.getInstance().createContent(shell);
 				shell.layout();
 				
 			}
@@ -102,8 +137,8 @@ public class SignInApplication {
 	
 	
 	public static void main(String[] args) {
-		SignInApplication application = new SignInApplication();
-		application.run();
+		
+		SignInApplication.getInstance().run();
 	}
 
 }
