@@ -74,19 +74,19 @@ public class Searcher
 //		for (int i = 0; i < hits.length(); i ++)
 //			System.out.println(hits.doc(i));
 //		int numFound = wrapper.getNumFound();
-//		if (numFound == 0)
-//			throw new Exception("No results to preview");
+		int numFound = docs.totalHits;
+		if (numFound == 0)
+			throw new Exception("No results to preview");
 //		final Document []docs = wrapper.getDocuments();
 //		numberOfResults = Math.min(numFound, numberOfResults);
+		numberOfResults = Math.min(numberOfResults, numFound);
 		MessageRecord[] results = new MessageRecord[numberOfResults];
-		
-		for(int i = 0; i < docs.totalHits; i++)
+		for(int i = 0; i < numberOfResults; i++)
 		{
-			ScoreDoc scoreDoc = docs.scoreDocs[i];
-			Document doc = searcher.doc(scoreDoc.doc); //7
-			System.out.println(doc.get("Path"));
-			String messagePath = doc.get("Path");
-			MessageRecord temp = createMessageRecord(messagePath);
+			ScoreDoc scoreDoc = docs.scoreDocs[i + start];
+			Document doc = searcher.doc(scoreDoc.doc);
+			String path = doc.get("Path");//7
+			MessageRecord temp = createMessageRecord(path);
 			temp.setFolder(doc.get("Folder"));
 			results[i] = temp;
 		}
