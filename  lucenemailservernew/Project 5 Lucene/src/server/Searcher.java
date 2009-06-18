@@ -71,6 +71,7 @@ public class Searcher
 	 */
 	public MessageRecord[] search(String userName, String queryString, final int start, final int end) throws Exception
 	{	
+		
 		int numberOfResults = end - start;
 		QueryParser parser = new QueryParser(DEFAULT_FIELD, new StandardAnalyzer());
 		Query query = parser.parse(queryString);
