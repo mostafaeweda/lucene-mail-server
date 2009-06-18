@@ -47,7 +47,7 @@ public class MessageWriter extends XMLwriter {
 	public File copyMessage( Message message, String[] attachments, Contact contact) throws IOException, SAXException
 	{
 		contact.incrPrimarySent();
-		String primary =contact.getPrimarySent() + "";
+		String primary = contact.getPrimarySent() + "";
 		for (int i = primary.length(); i < Constants.PRIMARY_KEY_LENGTH; i++)
 			primary = "0" + primary;
 		File newMessage = new File(Constants.MESSAGES_PATH + contact.getUserName() + "." +
@@ -70,7 +70,7 @@ public class MessageWriter extends XMLwriter {
 			hd.endElement("", "", "Receiver");
 		}
 		hd.endElement("","","Receivers");
-		writeElem(hd, "Body", message.getBody().toString(), atts);
+		message.getBody().writeXML(hd);
 		hd.startElement("","","Attachments",atts);
 		if (attachments != null)
 			for (int i = 0; i < attachments.length; i++)
