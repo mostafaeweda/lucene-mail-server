@@ -258,14 +258,15 @@ public void addContact(String IP, String name)
 	public static void main(String[] args) throws Exception 
 	{
 		Controller cont = getInstance();
-		cont.signUp("12", "1", "1", "1", "1",
-			1, "!", 1, "1");
+//		cont.signUp("12", "1", "1", "1", "1",
+//			1, "!", 1, "1");
 //		MessageRecord[] re = cont.openFolder("12", "Inbox", 0, 20);
 //		System.out.println(re.length);
-		cont.signUp("13", "2", "2", "1", "1",
-				1, "!", 1, "1");
-//		cont.signIn("1", "1", "12");
-//		cont.signIn("2", "2", "13");
+//		cont.signUp("13", "2", "2", "1", "1",
+//				1, "!", 1, "1");
+//		System.exit(0);
+		cont.signIn("1", "1", "12");
+		cont.signIn("2", "2", "13");
 		cont.sendMessage("12", new String[]{"2"}, "3weda!!!", new Body("3weda yasser and 3ebso and kimo :p", null));
 		cont.sendMessage("12", new String[]{"2"}, "7mraaa!!!", new Body("7mra ya 3weda :p", null));
 		cont.sendMessage("13", new String[]{"1"}, "mohamed yasser", new Body("want to know that you are my friends welcome to my world", null));

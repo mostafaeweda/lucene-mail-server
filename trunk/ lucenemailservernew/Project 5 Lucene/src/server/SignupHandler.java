@@ -78,7 +78,7 @@ public class SignupHandler {
 	{
 		Contact newContact = XMLProfileWriter.getInstance().writeProfile(profile, "" + usersPrimaryKey);
 		usersPrimaryKey++;
-//		sendWelcomeMessage(profile.getUserName());
+		sendWelcomeMessage(profile.getUserName());
 		return newContact;
 	}
 
