@@ -78,6 +78,7 @@ public class Searcher
 		final IndexSearcher searcher = new IndexSearcher(FSDirectory.getDirectory(Constants.ACCOUNTS_PATH
 				+ userName + File.separatorChar + "indexFiles"));
 //		HitCollectorWrapper wrapper = new HitCollectorWrapper(searcher, start, end);
+		System.out.println("");
 		TopDocs docs = searcher.search(query, null, 20, new Sort(new SortField("Date", new SortComparatorSource()
 		{
 			private static final long serialVersionUID = 1L;
