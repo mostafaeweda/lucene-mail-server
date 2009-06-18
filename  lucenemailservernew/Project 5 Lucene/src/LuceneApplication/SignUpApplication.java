@@ -1,5 +1,7 @@
 package LuceneApplication;
 
+import java.net.InetAddress;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -7,7 +9,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -22,47 +23,50 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import server.Controller;
+
 public class SignUpApplication {
 
-	private SignUpApplication(){}
-	
+	private SignUpApplication() {
+	}
+
 	private Display display;
 	private Color color;
 	private Font font;
 	private static SignUpApplication instance;
-	
-	
+
 	final String GENDER_ARRAY[] = { "-SelectOne-", "Male", "Female" };
 	final String BRITHDAY_ARRAY[] = { "-SelectMonth-", "January", "Februaray",
 			"Marth", "April", "May", "June", "July", "Augaust", "September",
 			"October", "Nouvember", "Decamber" };
 
-	final String questions[] = new String[]{
-			"-SelectOne-","What is your pet name?", "What is your favourite car?",
-			"What is your favourite friend's name?", "What is your favourite Country?"
-		};
+	final String questions[] = new String[] { "-SelectOne-",
+			"What is your pet name?", "What is your favourite car?",
+			"What is your favourite friend's name?",
+			"What is your favourite Country?" };
+
 	void init() {
 
 		color = new Color(display, new RGB(128, 0, 128));
 		font = new Font(display, "Arial", 12, SWT.BOLD);
 		display = Display.getCurrent();
 	}
-	
-	public static SignUpApplication getInstance(){
-		if(instance == null)
+
+	public static SignUpApplication getInstance() {
+		if (instance == null)
 			instance = new SignUpApplication();
 		return instance;
 	}
-	
-	public void createContent(Shell shell) {
+
+	public Composite createContent(final Shell shell) {
 		init();
-		Composite composite = new Composite(shell, SWT.None);
+		final Composite composite = new Composite(shell, SWT.None);
 		composite.setLayout(new FormLayout());
 		Composite upperComposite = new Composite(composite, SWT.None);
 		upperComposite.setLayout(new GridLayout(2, true));
 		FormData formData = new FormData();
 		formData.top = new FormAttachment();
-		formData.bottom = new FormAttachment(25);
+		formData.bottom = new FormAttachment(28);
 		formData.right = new FormAttachment(100, -1);
 		formData.left = new FormAttachment(0, 0);
 		upperComposite.setLayoutData(formData);
@@ -83,13 +87,15 @@ public class SignUpApplication {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
+				composite.dispose();
+				SignInApplication.getInstance().createContent();
+				shell.layout();
 
 			}
 
 		});
 		Hyperlink hyperlink = new Hyperlink(signInComposite, SWT.NONE);
-		hyperlink.setText("Forget your password or Yahoo! ID?");
+		hyperlink.setText("Forget your password or M3AK! ID?");
 		hyperlink.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -130,24 +136,24 @@ public class SignUpApplication {
 		Label myNameLabel = new Label(urSelfComposite, SWT.NO);
 		myNameLabel.setText("My Name : ");
 
-		Text firstNameButton = new Text(urSelfComposite, SWT.BORDER);
-		firstNameButton.setText("First Name");
+		final Text firstNameText = new Text(urSelfComposite, SWT.BORDER);
+		firstNameText.setText("First Name");
 		GridData gridData = new GridData();
 		gridData.widthHint = 150;
-		firstNameButton.setLayoutData(gridData);
+		firstNameText.setLayoutData(gridData);
 
-		Text lastNameButton = new Text(urSelfComposite, SWT.BORDER);
-		lastNameButton.setText("Last Name");
+		final Text lastNameText = new Text(urSelfComposite, SWT.BORDER);
+		lastNameText.setText("Last Name");
 		gridData = new GridData();
 		gridData.widthHint = 150;
-		lastNameButton.setLayoutData(gridData);
+		lastNameText.setLayoutData(gridData);
 
 		new Label(urSelfComposite, SWT.None);
 
 		Label genderLabel = new Label(urSelfComposite, SWT.NO);
 		genderLabel.setText("Gender : ");
 
-		Combo genderCombo = new Combo(urSelfComposite, SWT.BORDER);
+		final Combo genderCombo = new Combo(urSelfComposite, SWT.BORDER);
 		genderCombo.setItems(GENDER_ARRAY);
 		genderCombo.select(0);
 		gridData = new GridData();
@@ -160,24 +166,24 @@ public class SignUpApplication {
 		Label brithdayLabel = new Label(urSelfComposite, SWT.NO);
 		brithdayLabel.setText("Brithday : ");
 
-		Combo brithdayCombo = new Combo(urSelfComposite, SWT.BORDER);
+		final Combo brithdayCombo = new Combo(urSelfComposite, SWT.BORDER);
 		brithdayCombo.setItems(BRITHDAY_ARRAY);
 		brithdayCombo.select(0);
 		gridData = new GridData();
 		gridData.widthHint = 150;
 		brithdayCombo.setLayoutData(gridData);
 
-		Text dayButton = new Text(urSelfComposite, SWT.BORDER);
-		dayButton.setText("Day");
+		final Text dayText = new Text(urSelfComposite, SWT.BORDER);
+		dayText.setText("Day");
 		gridData = new GridData();
 		gridData.widthHint = 150;
-		dayButton.setLayoutData(gridData);
+		dayText.setLayoutData(gridData);
 
-		Text yearButton = new Text(urSelfComposite, SWT.BORDER);
-		yearButton.setText("Year");
+		final Text yearText = new Text(urSelfComposite, SWT.BORDER);
+		yearText.setText("Year");
 		gridData = new GridData();
 		gridData.widthHint = 150;
-		yearButton.setLayoutData(gridData);
+		yearText.setLayoutData(gridData);
 
 		Label label2 = new Label(lowerComposite, SWT.None);
 		label2.setForeground(color);
@@ -201,46 +207,49 @@ public class SignUpApplication {
 		Label idLabel = new Label(idComposite, SWT.NO);
 		idLabel.setText(" M3AK ID And Email : ");
 
-		Text idText = new Text(idComposite, SWT.BORDER);
+		final Text idText = new Text(idComposite, SWT.BORDER);
 		gridData = new GridData();
 		gridData.widthHint = 150;
 		idText.setLayoutData(gridData);
 		new Label(idComposite, SWT.None).setText("@m3ak.com");
 		Button checkButton = new Button(idComposite, SWT.PUSH);
 		checkButton.setText("Check Avilable");
-		
-		Label checkLabel = new Label(idComposite,SWT.None);
+
+		final Label checkLabel = new Label(idComposite, SWT.None);
 		checkLabel.setText("     ");
-		checkLabel.setBackground(display.getSystemColor(SWT.COLOR_RED));
-		
+		checkLabel.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
+
 		checkButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
+				String userName = idText.getText();
+				if(Controller.getInstance().validateUserName(userName)&&userName.length() != 0)
+					checkLabel.setBackground(display.getSystemColor(SWT.COLOR_GREEN));
+				else
+					checkLabel.setBackground(display.getSystemColor(SWT.COLOR_RED));
+				
 
 			}
 
 		});
-		
 
 		Label passLabel = new Label(idComposite, SWT.NO);
 		passLabel.setText("Password : ");
-		Text passText = new Text(idComposite, SWT.BORDER|SWT.PASSWORD);
+		final Text passText = new Text(idComposite, SWT.BORDER | SWT.PASSWORD);
 		gridData = new GridData();
 		gridData.widthHint = 150;
 		passText.setLayoutData(gridData);
-		new Label(idComposite,SWT.None);
-		new Label(idComposite,SWT.None);
-		new Label(idComposite,SWT.None);
-		
+		new Label(idComposite, SWT.None);
+		new Label(idComposite, SWT.None);
+		new Label(idComposite, SWT.None);
+
 		Label rePassLabel = new Label(idComposite, SWT.NO);
 		rePassLabel.setText("Re-Type Password : ");
-		Text rePassText = new Text(idComposite, SWT.BORDER|SWT.PASSWORD);
+		final Text rePassText = new Text(idComposite, SWT.BORDER | SWT.PASSWORD);
 		gridData = new GridData();
 		gridData.widthHint = 150;
 		rePassText.setLayoutData(gridData);
-		
-		
+
 		Label label3 = new Label(lowerComposite, SWT.None);
 		label3.setForeground(color);
 		label3.setFont(font);
@@ -250,69 +259,138 @@ public class SignUpApplication {
 		formData.left = new FormAttachment(2);
 		formData.right = new FormAttachment(100, 0);
 		label3.setLayoutData(formData);
-		
-		
-		Composite forgetPasswordComposite = new Composite(lowerComposite,SWT.None);
+
+		Composite forgetPasswordComposite = new Composite(lowerComposite,
+				SWT.None);
 		forgetPasswordComposite.setLayout(new GridLayout(2, false));
 		formData = new FormData();
 		formData.top = new FormAttachment(label3);
 		formData.left = new FormAttachment(10);
 		formData.right = new FormAttachment(100, 0);
 		forgetPasswordComposite.setLayoutData(formData);
-		
-		
+
 		Label secretQLabel = new Label(forgetPasswordComposite, SWT.NO);
 		secretQLabel.setText("Security Question : ");
-		Combo secretQCombo = new Combo(forgetPasswordComposite, SWT.BORDER);
+		final Combo secretQCombo = new Combo(forgetPasswordComposite,
+				SWT.BORDER);
 		gridData = new GridData();
 		gridData.widthHint = 150;
 		secretQCombo.setItems(questions);
 		secretQCombo.select(0);
 		secretQCombo.setLayoutData(gridData);
-		
-		
+
 		Label answerLabel = new Label(forgetPasswordComposite, SWT.NO);
 		answerLabel.setText("Your Answer ");
-		Text answerText = new Text(forgetPasswordComposite, SWT.BORDER);
+		final Text answerText = new Text(forgetPasswordComposite, SWT.BORDER);
 		gridData = new GridData();
 		gridData.widthHint = 150;
 		answerText.setLayoutData(gridData);
-		
-		
+
 		Button createButton = new Button(lowerComposite, SWT.PUSH);
 		formData = new FormData();
-		formData.top = new FormAttachment(forgetPasswordComposite,20);
+		formData.top = new FormAttachment(forgetPasswordComposite, 20);
 		formData.left = new FormAttachment(20);
-		createButton.setText("        Create Account     " );
+		createButton.setText("        Create Account     ");
 		createButton.setLayoutData(formData);
-		createButton.addSelectionListener(new SelectionAdapter(){
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		});
-
-		
 		Button cancelButton = new Button(lowerComposite, SWT.PUSH);
 		formData = new FormData();
-		formData.left = new FormAttachment(createButton,5);
-		formData.top = new FormAttachment(forgetPasswordComposite,20);
-		cancelButton.setText("         Cancel         " );
+		formData.left = new FormAttachment(createButton, 5);
+		formData.top = new FormAttachment(forgetPasswordComposite, 20);
+		cancelButton.setText("         Cancel         ");
 		cancelButton.setLayoutData(formData);
-		cancelButton.addSelectionListener(new SelectionAdapter(){
-			
+		cancelButton.addSelectionListener(new SelectionAdapter() {
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		});
-		
-	}
+				composite.dispose();
+				SignInApplication.getInstance().createContent();
+				shell.layout();
 
+			}
+
+		});
+
+		final Label signUpLabel = new Label(lowerComposite, SWT.BORDER);
+		formData = new FormData();
+		formData.left = new FormAttachment();
+		formData.right = new FormAttachment(100, -5);
+		formData.top = new FormAttachment(forgetPasswordComposite, 50);
+		formData.bottom = new FormAttachment(100, 0);
+		signUpLabel.setLayoutData(formData);
+
+		createButton.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String str = "";
+				Controller controller = Controller.getInstance();
+
+				String fName = firstNameText.getText();
+				String lName = lastNameText.getText();
+				int gender = genderCombo.getSelectionIndex();
+				int month = brithdayCombo.getSelectionIndex();
+				String day = dayText.getText();
+				String year = yearText.getText();
+				String userName = idText.getText();
+				String password = passText.getText();
+				String repassword = rePassText.getText();
+				int secretQ = secretQCombo.getSelectionIndex();
+				String answer = answerText.getText();
+
+				if (fName.length() == 0)
+					str += "\t\tyou must Enter First Name\n";
+				if (lName.length() == 0)
+					str += "\t\tyou must Enter Last Name\n";
+				if (gender == 0)
+					str += "\t\tyou must Enter Gender \n";
+				if (month == 0 || day.length() == 0 || year.length() == 0)
+					str += "\t\tyou must Enter Full Brithday \n";
+				if (userName.length() != 0) {
+					if (userName.charAt(0) >= '0' && userName.charAt(0) <= '9')
+						str += "\t\tID mustn't has aDigit in the first \n";
+				} else
+					str += "\t\tyou must enter your ID  \n";
+
+				if (!controller.validateUserName(userName))
+					str += "\t\tthis ID is exist\n";
+				if (password.length() == 0)
+					str += "\t\tyou must EnterPassword\n";
+				if (password.length() <= 6)
+					str += "\t\tThe password must have more or equal  6 character \n";
+				if (!password.equals(repassword))
+					str += "\t\tERORR in Confirmation of password\n";
+				if (secretQ == 0)
+					str += "\t\tyou must choose secret Question\n";
+				if (answer.length() == 0)
+					str += "\t\tyou must enter secret Answer\n";
+
+				if (str.length() == 0) {
+					String brithday = day + BRITHDAY_ARRAY[month] + year;
+					try {
+						controller
+								.signUp(InetAddress.getLocalHost()
+										.getCanonicalHostName(), userName,
+										password, fName, lName, gender,
+										brithday, secretQ, answer);
+						composite.dispose();
+						MailApplication.getInstance(userName).createContent(shell);
+						shell.layout();
+						
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				} else {
+					signUpLabel.setForeground(display.getSystemColor(SWT.COLOR_RED));
+					signUpLabel.setText(str);
+
+				}
+
+			}
+
+		});
+
+		return composite;
+	}
 
 }
