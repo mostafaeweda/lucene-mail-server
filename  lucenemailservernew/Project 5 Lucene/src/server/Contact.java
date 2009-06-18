@@ -20,7 +20,7 @@ public class Contact {
 	private int primarySent;
 	private String userName;
 	private String IP;
-	private String[] contactList;
+	private ArrayList<String> contactList;
 	private ArrayList<String> folders;
 	private boolean online;
 	private long signInTime;
@@ -34,6 +34,7 @@ public class Contact {
 		this.IP = IP;
 		this.online = true;
 		folders = new ArrayList<String>();
+		contactList = new ArrayList<String>();
 		folders.add("Inbox");
 		folders.add("Sent");
 		folders.add("Spam");
@@ -43,6 +44,7 @@ public class Contact {
 	public Contact()
 	{
 		this.folders = new ArrayList<String>();
+		contactList = new ArrayList<String>();
 		signInTime = System.currentTimeMillis();
 	}
 
@@ -90,7 +92,7 @@ public class Contact {
 	 * Set the value of contactList
 	 * @param newVar the new value of contactList
 	 */
-	public void setContactList ( String[] newVar ) {
+	public void setContactList (ArrayList<String> newVar ) {
 		contactList = newVar;
 	}
 
@@ -98,7 +100,7 @@ public class Contact {
 	 * Get the value of contactList
 	 * @return the value of contactList
 	 */
-	public String[] getContactList ( ) {
+	public ArrayList<String> getContactList ( ) {
 		return contactList;
 	}
 
@@ -138,6 +140,10 @@ public class Contact {
 
 	public void setPrimarySent(int primarySent) {
 		this.primarySent = primarySent;
+	}
+
+	public void addContact(String name) {
+		contactList.add(name);
 	}
 	
 	
