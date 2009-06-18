@@ -30,10 +30,10 @@ import server.parser.ExtensionHandler;
  * Class Indexer
  */
 
-public class Indexer {
-
+public class Indexer
+{
 	private static Indexer instance; //  stands for a Singleton Object of the class
-	
+
 	private  Indexer () { };
 
 	public static Indexer getInstance()
@@ -212,12 +212,11 @@ public class Indexer {
 		indexWriter.addDocument(document);
 		indexWriter.optimize();
 		indexWriter.close();
-		
 //		try {
 //			Controller.getInstance().search(sender.getIP(), "welcome", 0, 20);
 //		} catch (Exception e) {
 //			e.printStackTrace();
-//		}
+//		}	
 		updateMessagePointers(Constants.MESSAGES_PATH + message.getSender()+ "." + str + ".xml", 1);
 	}
 }
