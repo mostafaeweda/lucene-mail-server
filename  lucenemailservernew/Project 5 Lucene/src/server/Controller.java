@@ -34,11 +34,10 @@ public class Controller {
 
 	private Hashtable<String, Contact> onlineContacts;
 	
-	private static Controller instance;
-	
-	
-	private Controller () 
-	{ 
+	private static Controller controller;
+
+	private Controller ()
+	{
 		onlineContacts = new Hashtable<String, Contact>();
 		File serverDir = new File(Constants.SERVER_PATH);//represent server directory
 		File accountsDir = new File(Constants.ACCOUNTS_PATH);//represents accounts directory
@@ -55,9 +54,9 @@ public class Controller {
 	
 	public static Controller getInstance()
 	{
-		if (instance == null)
-			instance = new Controller();
-		return instance;
+		if(controller == null)
+			controller = new Controller();
+		return controller;
 	}
 	
 	public boolean signIn(String userName, String password, String IP) throws Exception
@@ -155,7 +154,7 @@ public class Controller {
 		}
 		return messages;
 	}
-
+	
 	public void moveMessage(String IP, MessageRecord[] msgs, String to) throws CorruptIndexException, IOException
 	{
 		Contact sender = onlineContacts.get(IP);
@@ -228,12 +227,12 @@ public class Controller {
 		onlineContacts = newVar;
 	}
 
-	public void addContact(String IP, String name)
+public void addContact(String IP, String name)
 	{
 		Contact con = onlineContacts.get(IP);
 		con.addContact(name);
 	}
-	
+
 	/**
 	 * Get the value of onlineContacts
 	 * @return the value of onlineContacts
@@ -259,19 +258,22 @@ public class Controller {
 	public static void main(String[] args) throws Exception 
 	{
 		Controller cont = getInstance();
-//		cont.signUp("12", "1", "1", "1", "1",
-//			1, "!", 1, "1");
+		cont.signUp("12", "1", "1", "1", "1",
+			1, "!", 1, "1");
 //		MessageRecord[] re = cont.openFolder("12", "Inbox", 0, 20);
 //		System.out.println(re.length);
-//		cont.signUp("13", "2", "2", "1", "1",
-//				1, "!", 1, "1");
-		cont.signIn("1", "1", "12");
-		cont.signIn("2", "2", "13");
+		cont.signUp("13", "2", "2", "1", "1",
+				1, "!", 1, "1");
+//		cont.signIn("1", "1", "12");
+//		cont.signIn("2", "2", "13");
 		cont.sendMessage("12", new String[]{"2"}, "3weda!!!", new Body("3weda yasser and 3ebso and kimo :p", null));
 		cont.sendMessage("12", new String[]{"2"}, "7mraaa!!!", new Body("7mra ya 3weda :p", null));
 		cont.sendMessage("13", new String[]{"1"}, "mohamed yasser", new Body("want to know that you are my friends welcome to my world", null));
-		Controller.getInstance().search("13", "Folder:Inbox AND 7mra", 0, 20);
-		Controller.getInstance().search("12", "Folder:Sent AND 7mra", 0, 20);
+		MessageRecord[] re = Controller.getInstance().search("13", "Folder:Inbox", 0, 20);
+		System.out.println("-------------------------------------------------");
+		Controller.getInstance().search("12", "Folder:Sent", 0, 20);
+		System.out.println("-------------------------------------------------");
+		Controller.getInstance().search("12", "Folder:Inbox", 0, 20);
 //		MessageRecord[] record = cont.search("12", "friends", 0, 20);
 		System.out.println("-------------------------------------------------");
 //		cont.deleteMessages("13", record);
