@@ -12,6 +12,8 @@ import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.HitCollector;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.FSDirectory;
 import org.xml.sax.SAXException;
 
@@ -59,32 +61,36 @@ public class Searcher
 	 * @param        query
 	 * @throws Exception
 	 */
-	public MessageRecord[] search(String userName, String queryString, final int start, final int end) throws Exception
+	public void search(String userName, String queryString, final int start, final int end) throws Exception
 	{	
 		int numberOfResults = end - start;
 		QueryParser parser = new QueryParser(DEFAULT_FIELD, new StandardAnalyzer());
 		Query query = parser.parse(queryString);
 		final IndexSearcher searcher = new IndexSearcher(FSDirectory.getDirectory(Constants.ACCOUNTS_PATH
 				+ userName + File.separatorChar + "indexFiles"));
-		HitCollectorWrapper wrapper = new HitCollectorWrapper(searcher, start, end);
-		searcher.search(query, wrapper);
+//		HitCollectorWrapper wrapper = new HitCollectorWrapper(searcher, start, end);
+		TopDocs docs = searcher.search(query, 20);
 //		Hits hits = searcher.search(query);
 //		for (int i = 0; i < hits.length(); i ++)
 //			System.out.println(hits.doc(i));
-		int numFound = wrapper.getNumFound();
-		if (numFound == 0)
-			throw new Exception("No results to preview");
-		final Document []docs = wrapper.getDocuments();
-		numberOfResults = Math.min(numFound, numberOfResults);
-		MessageRecord[] results = new MessageRecord[numberOfResults];
-		for(int i = 0; i < numberOfResults; i++)
+//		int numFound = wrapper.getNumFound();
+//		if (numFound == 0)
+//			throw new Exception("No results to preview");
+//		final Document []docs = wrapper.getDocuments();
+//		numberOfResults = Math.min(numFound, numberOfResults);
+//		MessageRecord[] results = new MessageRecord[numberOfResults];
+		
+		for(int i = 0; i < docs.totalHits; i++)
 		{
-			String messagePath = docs[i].get("Path");
-			MessageRecord temp = createMessageRecord(messagePath);
-			temp.setFolder(docs[i].get("Folder"));
-			results[i] = temp;
+			ScoreDoc scoreDoc = docs.scoreDocs[i];
+			Document doc = searcher.doc(scoreDoc.doc); //7
+			System.out.println(doc.get("Path"));
+//			String messagePath = docs[i].get("Path");
+//			MessageRecord temp = createMessageRecord(messagePath);
+//			temp.setFolder(docs[i].get("Folder"));
+//			results[i] = temp;
 		}
-		return results;
+//		return results;
 	}
 
 	private MessageRecord createMessageRecord(String messagePath) throws SAXException, IOException, ParserConfigurationException

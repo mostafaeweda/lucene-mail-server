@@ -78,7 +78,7 @@ public class SignupHandler {
 	{
 		Contact newContact = XMLProfileWriter.getInstance().writeProfile(profile, "" + usersPrimaryKey);
 		usersPrimaryKey++;
-		sendWelcomeMessage(profile.getUserName());
+//		sendWelcomeMessage(profile.getUserName());
 		return newContact;
 	}
 
@@ -91,11 +91,9 @@ public class SignupHandler {
 	{
 		String userName = ".admin";
 		String subject = "Welcome in M3ak";
-		String text = "Hello " + receiver + ",\n\nwelcome in A3MK world!!!!!";
+		String text = "Hello " + receiver + ",\n\nwelcome in M3AK world!!!!!";
 		Body body = new Body(text, null);
 		Message msg = new Message(userName, new String[] {receiver}, subject, body);
 		Indexer.getInstance().addMessage(msg, new Contact(".admin","11"), new Contact[]{new Contact(receiver, "11")});
 	}
-
-
 }
