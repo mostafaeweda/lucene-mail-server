@@ -3,6 +3,7 @@ package server;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
@@ -30,7 +31,7 @@ public class XMLContactListWriter extends XMLwriter
 	 * @throws SAXException 
 	 * @throws IOException 
 	 */
-	public void writeContactList(String[] contactList, String userName) throws SAXException, IOException
+	public void writeContactList(ArrayList<String> contactList, String userName) throws SAXException, IOException
 	{
 		File newUserDir = new File("server" + File.separatorChar + "accounts" + File.separatorChar 
 				+ userName + File.separatorChar + "profile");
@@ -43,9 +44,9 @@ public class XMLContactListWriter extends XMLwriter
 		hd.startDocument();
 		AttributesImpl atts = new AttributesImpl();
 		hd.startElement("", "", "ContactList", atts);
-		for (int i = 0; i < contactList.length; i++)
+		for (int i = 0; i < contactList.size(); i++)
 		{
-			writeElem(hd, "Contact", contactList[i], atts);
+			writeElem(hd, "Contact", contactList.get(i), atts);
 		}
 		hd.endElement("", "", "ContactList");
 		fos.close();

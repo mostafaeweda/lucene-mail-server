@@ -184,7 +184,7 @@ public class Indexer {
 			str = "0" + str;
 		IndexWriter indexWriter = new IndexWriter(FSDirectory
 				.getDirectory(userIndex), new StandardAnalyzer(), create,
-				IndexWriter.MaxFieldLength.UNLIMITED);
+				IndexWriter.MaxFieldLength.LIMITED);
 
 		Document document = new Document();
 		document.add(new Field("Sender", message.getSender(), Field.Store.YES,
@@ -200,7 +200,7 @@ public class Indexer {
 		String recievers[] = message.getRecievers();
 		recieversString = recievers[0];
 		for (int i = 1; i < recievers.length; i++)
-			recieversString = "\n" + recieversString + recievers[i];
+			recieversString += "\n" + recievers[i];
 		document.add(new Field("Recievers", recieversString, Field.Store.YES,
 				Field.Index.ANALYZED));
 		document.add(new Field("Subject", message.getSubject(),
