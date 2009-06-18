@@ -11,6 +11,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
+import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -184,25 +185,25 @@ public class Indexer {
 			str = "0" + str;
 		IndexWriter indexWriter = new IndexWriter(FSDirectory
 				.getDirectory(userIndex), new StandardAnalyzer(), create,
-				IndexWriter.MaxFieldLength.LIMITED);
+				IndexWriter.MaxFieldLength.UNLIMITED);
 
 		Document document = new Document();
 		document.add(new Field("Sender", message.getSender(), Field.Store.YES,
-				Field.Index.ANALYZED));
+				Field.Index.NOT_ANALYZED));
 		document.add(new Field("Date", message.getDate(), Field.Store.YES,
 				Field.Index.NOT_ANALYZED));
 		String primary = message.getSender() + "." + str;
 		document.add(new Field("PrimaryKey", primary, Field.Store.YES,
 				Field.Index.NOT_ANALYZED));
 		document.add(new Field("Folder", folder, Field.Store.YES,
-				Field.Index.NOT_ANALYZED));
+				Field.Index.ANALYZED));
 		String recieversString = new String();
 		String recievers[] = message.getRecievers();
 		recieversString = recievers[0];
 		for (int i = 1; i < recievers.length; i++)
-			recieversString += "\n" + recievers[i];
+			recieversString = "\n" + recieversString + recievers[i];
 		document.add(new Field("Recievers", recieversString, Field.Store.YES,
-				Field.Index.ANALYZED));
+				Field.Index.NOT_ANALYZED));
 		document.add(new Field("Subject", message.getSubject(),
 				Field.Store.YES, Field.Index.ANALYZED));
 		document.add(new Field("Body", message.getBody().toString(),
@@ -213,6 +214,11 @@ public class Indexer {
 		indexWriter.optimize();
 		indexWriter.close();
 		
+//		try {
+//			Controller.getInstance().search(sender.getIP(), "welcome", 0, 20);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		updateMessagePointers(Constants.MESSAGES_PATH + message.getSender()+ "." + str + ".xml", 1);
 	}
 }
