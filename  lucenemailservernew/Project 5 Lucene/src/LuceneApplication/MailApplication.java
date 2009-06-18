@@ -1,5 +1,7 @@
 package LuceneApplication;
 
+import java.net.InetAddress;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -31,6 +33,9 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
+
+import server.Controller;
+import server.message.MessageRecord;
 
 public class MailApplication {
 
@@ -67,34 +72,32 @@ public class MailApplication {
 		final Composite mailComposite = new Composite(shell, SWT.None);
 		FormLayout formLayout = new FormLayout();
 		mailComposite.setLayout(formLayout);
-		
-		// canvas for logo 
-		Canvas canvas = new Canvas(mailComposite,SWT.DOUBLE_BUFFERED);
+
+		// canvas for logo
+		Canvas canvas = new Canvas(mailComposite, SWT.DOUBLE_BUFFERED);
 		FormData formData = new FormData();
 		formData.top = new FormAttachment(0);
 		formData.bottom = new FormAttachment(10);
-		formData.right = new FormAttachment(100,-5);
-		formData.left = new FormAttachment(0,0);
+		formData.right = new FormAttachment(100, -5);
+		formData.left = new FormAttachment(0, 0);
 		canvas.setLayoutData(formData);
-		canvas.addPaintListener(new PaintListener(){
+		canvas.addPaintListener(new PaintListener() {
 
 			@Override
 			public void paintControl(PaintEvent e) {
 				e.gc.setFont(font3);
 				e.gc.drawString("Hello," + userName + "!", 250, 15);
-				e.gc.drawImage(new Image(display,"m3akMail.png"), 0, 0);
-				
-				
+				e.gc.drawImage(new Image(display, "m3akMail.png"), 0, 0);
+
 			}
 
-			
 		});
-		
+
 		// Composite for inbox , sent, spam and Contacts
 		Composite iconsComposite = new Composite(mailComposite, SWT.BORDER);
 		iconsComposite.setLayout(new GridLayout(2, false));
 		formData = new FormData();
-		formData.top = new FormAttachment(canvas,40);
+		formData.top = new FormAttachment(canvas, 40);
 		formData.bottom = new FormAttachment(100, -10);
 		formData.width = 205;
 		iconsComposite.setLayoutData(formData);
@@ -124,7 +127,9 @@ public class MailApplication {
 		hyperlink.addSelectionListener(new SelectionAdapter() {
 			// TODO
 			public void widgetSelected(SelectionEvent arg0) {
-				searchInBox(cTabFolder);
+
+				inBoxListner(cTabFolder);
+
 			}
 
 		});
@@ -149,7 +154,7 @@ public class MailApplication {
 						}
 					});
 
-					inboxItem.setControl(getInboxControl(cTabFolder));
+					inboxItem.setControl(getInboxControl(cTabFolder, "Sent"));
 					sentOpen = !sentOpen;
 				}
 
@@ -175,11 +180,9 @@ public class MailApplication {
 						}
 					});
 
-					inboxItem.setControl(getInboxControl(cTabFolder));
+					inboxItem.setControl(getInboxControl(cTabFolder, "Spam"));
 					spamOpen = !spamOpen;
 				}
-
-
 
 			}
 
@@ -210,7 +213,7 @@ public class MailApplication {
 		checkMailButton.setLayoutData(formData);
 		checkMailButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				searchInBox(cTabFolder);
+				inBoxListner(cTabFolder);
 			}
 
 		});
@@ -296,26 +299,27 @@ public class MailApplication {
 		return composite;
 	}
 
-	public Control getInboxControl(CTabFolder cTabFolder) {
+	private Control getInboxControl(CTabFolder cTabFolder, String str) {
 		Composite composite = new Composite(cTabFolder, SWT.NONE);
 		composite.setLayout(new FormLayout());
-		ToolBar inbboxToolBar = new ToolBar(composite,SWT.None);
+		ToolBar inbboxToolBar = new ToolBar(composite, SWT.None);
 		FormData formData = new FormData();
 		formData.left = new FormAttachment(0, 0);
 		formData.right = new FormAttachment(100, -5);
 		formData.top = new FormAttachment(0, 0);
 		inbboxToolBar.setLayoutData(formData);
-		
-		ToolItem deleteItem = new ToolItem(inbboxToolBar,SWT.PUSH);
+
+		ToolItem deleteItem = new ToolItem(inbboxToolBar, SWT.PUSH);
 		deleteItem.setText("Delete");
-		deleteItem.setImage(new Image(display,"delete.png"));
-		deleteItem.addSelectionListener(new SelectionAdapter(){
+		deleteItem.setImage(new Image(display, "delete.png"));
+		deleteItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
 				
+				
+
 			}
-			
+
 		});
 
 		Table table = new Table(composite, SWT.SINGLE | SWT.FULL_SELECTION
@@ -342,13 +346,30 @@ public class MailApplication {
 		columns[2].setText("Date");
 		columns[2].pack();
 		table.pack();
-		TableItem item = new TableItem(table, SWT.NONE);
-		item.setText(new String[] { "koko", "lolo", "tot" });
+
+		Controller controller = Controller.getInstance();
+
+		try {
+			String ipAdress;
+			ipAdress = InetAddress.getLocalHost().getCanonicalHostName();
+			MessageRecord messageRecord[] = controller.openFolder(ipAdress,
+					str, 0, 15);
+			for (int i = 0; i < messageRecord.length; i++) {
+				TableItem item = new TableItem(table, SWT.NONE);
+				item.setText(new String[] { messageRecord[i].getSender(),
+						messageRecord[i].getSubject(),
+						messageRecord[i].getDate() });
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return composite;
 	}
 
-	private void searchInBox(CTabFolder cTabFolder) 
-	{
+	private void inBoxListner(CTabFolder cTabFolder) {
+
 		if (!inboxOpen) {
 			CTabItem inboxItem = new CTabItem(cTabFolder, SWT.CLOSE);
 			inboxItem.setText("Inbox");
@@ -359,10 +380,9 @@ public class MailApplication {
 				}
 			});
 
-			inboxItem.setControl(getInboxControl(cTabFolder));
+			inboxItem.setControl(getInboxControl(cTabFolder, "Inbox"));
 			inboxOpen = !inboxOpen;
 		}
-
 
 	}
 
