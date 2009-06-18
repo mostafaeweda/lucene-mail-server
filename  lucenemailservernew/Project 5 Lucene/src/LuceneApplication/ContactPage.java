@@ -18,8 +18,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 
-import server.Controller;
-
 public class ContactPage {
 
 	private Display display;
@@ -62,10 +60,11 @@ public class ContactPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
+		
 			}
 
 		});
-
+		
 		Button deleteButton = new Button(upperComposite, SWT.PUSH);
 		deleteButton.setImage(new Image(display, "delete.png"));
 		deleteButton.setText("Delete");
