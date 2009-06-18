@@ -61,7 +61,7 @@ public class Searcher
 	 * @param        query
 	 * @throws Exception
 	 */
-	public void search(String userName, String queryString, final int start, final int end) throws Exception
+	public MessageRecord[] search(String userName, String queryString, final int start, final int end) throws Exception
 	{	
 		int numberOfResults = end - start;
 		QueryParser parser = new QueryParser(DEFAULT_FIELD, new StandardAnalyzer());
@@ -78,19 +78,19 @@ public class Searcher
 //			throw new Exception("No results to preview");
 //		final Document []docs = wrapper.getDocuments();
 //		numberOfResults = Math.min(numFound, numberOfResults);
-//		MessageRecord[] results = new MessageRecord[numberOfResults];
+		MessageRecord[] results = new MessageRecord[numberOfResults];
 		
 		for(int i = 0; i < docs.totalHits; i++)
 		{
 			ScoreDoc scoreDoc = docs.scoreDocs[i];
 			Document doc = searcher.doc(scoreDoc.doc); //7
 			System.out.println(doc.get("Path"));
-//			String messagePath = docs[i].get("Path");
-//			MessageRecord temp = createMessageRecord(messagePath);
-//			temp.setFolder(docs[i].get("Folder"));
-//			results[i] = temp;
+			String messagePath = doc.get("Path");
+			MessageRecord temp = createMessageRecord(messagePath);
+			temp.setFolder(doc.get("Folder"));
+			results[i] = temp;
 		}
-//		return results;
+		return results;
 	}
 
 	private MessageRecord createMessageRecord(String messagePath) throws SAXException, IOException, ParserConfigurationException

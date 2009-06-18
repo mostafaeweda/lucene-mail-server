@@ -34,10 +34,11 @@ public class Controller {
 
 	private Hashtable<String, Contact> onlineContacts;
 	
-	private static Controller controller;
-
-	private Controller ()
-	{
+	private static Controller instance;
+	
+	
+	private Controller () 
+	{ 
 		onlineContacts = new Hashtable<String, Contact>();
 		File serverDir = new File(Constants.SERVER_PATH);//represent server directory
 		File accountsDir = new File(Constants.ACCOUNTS_PATH);//represents accounts directory
@@ -54,9 +55,9 @@ public class Controller {
 	
 	public static Controller getInstance()
 	{
-		if(controller == null)
-			controller = new Controller();
-		return controller;
+		if (instance == null)
+			instance = new Controller();
+		return instance;
 	}
 	
 	public boolean signIn(String userName, String password, String IP) throws Exception
@@ -147,16 +148,14 @@ public class Controller {
 	{
 		Contact con = onlineContacts.get(IP);
 		con.setSignInTime(System.currentTimeMillis());
-		MessageRecord[] messages = null;
-		Searcher.getInstance().search(con.getUserName(), query, start, end);
-//		MessageRecord[] messages = Searcher.getInstance().search(con.getUserName(), query, start, end);
-//		for (int i = 0; i < messages.length; i++)
-//		{
-//			System.out.println(messages[i].toString());
-//		}
+		MessageRecord[] messages = Searcher.getInstance().search(con.getUserName(), query, start, end);
+		for (int i = 0; i < messages.length; i++)
+		{
+			System.out.println(messages[i].toString());
+		}
 		return messages;
 	}
-	
+
 	public void moveMessage(String IP, MessageRecord[] msgs, String to) throws CorruptIndexException, IOException
 	{
 		Contact sender = onlineContacts.get(IP);
@@ -229,12 +228,12 @@ public class Controller {
 		onlineContacts = newVar;
 	}
 
-public void addContact(String IP, String name)
+	public void addContact(String IP, String name)
 	{
 		Contact con = onlineContacts.get(IP);
 		con.addContact(name);
 	}
-
+	
 	/**
 	 * Get the value of onlineContacts
 	 * @return the value of onlineContacts
