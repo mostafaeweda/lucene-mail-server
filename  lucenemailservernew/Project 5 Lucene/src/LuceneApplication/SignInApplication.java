@@ -102,7 +102,6 @@ public class SignInApplication {
 					
 					}		
 			}
-			
 		});
 		Composite hypComposite = new Composite(signInComposite,SWT.BORDER_SOLID);
 		hypComposite.setLayout(new GridLayout(1,false));
