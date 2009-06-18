@@ -78,6 +78,8 @@ public class ComposePage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String recievers = toText.getText();
+				if(recievers.charAt(recievers.length()-1)!=';')
+					recievers+=";";
 				if (recievers.length() != 0) {
 					Controller controller = Controller.getInstance();
 					String recieversArray[] = recievers.split(";");
