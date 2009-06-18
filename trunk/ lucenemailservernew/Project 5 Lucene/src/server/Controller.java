@@ -169,6 +169,15 @@ public class Controller {
 		}
 	}
 	
+	public Profile openProfile(String userName)
+	{
+		File folder = new File(Constants.ACCOUNTS_PATH + userName 
+				+ File.separatorChar + "info.xml");
+		if (folder.exists())
+			return new ProfileXMLReader(folder.getAbsolutePath()).beginParsing();
+		return null;
+	}
+	
 	public void checkIdle()
 	{
 		Thread t = new Thread(new Runnable(){

@@ -45,6 +45,11 @@ public class Profile {
 		
 	}
 	
+	public Profile ()
+	{
+		
+	}
+	
 	//
 	// Methods
 	//
