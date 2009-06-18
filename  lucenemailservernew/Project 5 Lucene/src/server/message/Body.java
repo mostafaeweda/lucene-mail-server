@@ -30,29 +30,44 @@ public class Body
 		hd.startElement(EMPTY, EMPTY, "Text", atts);
 		hd.characters(text.toCharArray(), 0, text.length());
 		hd.endElement(EMPTY, EMPTY, "Text");
+		hd.startElement(EMPTY, EMPTY, "Styles", atts);
 		for (int i = 0; i < styles.length; i++)
 		{
 			StyleRange style = styles[i];
-			atts = new AttributesImpl();
-			atts.addAttribute(EMPTY, EMPTY, "Style", "Start", style.start + "");
-			atts.addAttribute(EMPTY, EMPTY, "Style", "Length", style.length + "");
+			atts.clear();
+			atts.addAttribute(EMPTY, EMPTY, "Start", EMPTY, style.start + "");
+			atts.addAttribute(EMPTY, EMPTY, "Length", EMPTY, style.length + "");
 			if (style.font == null)
 			{
-				atts.addAttribute(EMPTY, EMPTY, "Style", "Font", "null");
+				atts.addAttribute(EMPTY, EMPTY, "Font", EMPTY, "null");
 			}
 			else
 			{
 				FontData font = style.font.getFontData()[0];
-				atts.addAttribute(EMPTY, EMPTY, "Style", "Font", font.name + "+" + font.height + "+" + font.style);
+				atts.addAttribute(EMPTY, EMPTY, "Font", EMPTY, font.name + "+" + font.height + "+" + font.style);
 			}
-			atts.addAttribute(EMPTY, EMPTY, "Style", "Underline", style.underline+"");
+			atts.addAttribute(EMPTY, EMPTY, "Underline", EMPTY, style.underline+"");
 			Color forground = style.foreground;
 			if (style.foreground == null)
-				atts.addAttribute(EMPTY, EMPTY, "Style", "Forground", "null");
+				atts.addAttribute(EMPTY, EMPTY, "Forground", EMPTY, "null");
 			else
-				atts.addAttribute(EMPTY, EMPTY, "Style", "Forground", forground.getRed() + "+" + forground.getGreen()
-								+ "+" + forground.getBlue() + '\"');
-			}
-			hd.endElement(EMPTY, EMPTY, "Body");
+				atts.addAttribute(EMPTY, EMPTY, "Forground", EMPTY, forground.getRed() + "+" + forground.getGreen()
+								+ "+" + forground.getBlue());
+			hd.startElement(EMPTY, EMPTY, "Style", atts);
+			hd.endElement(EMPTY, EMPTY, "Style");
+		}
+		atts.clear();
+		hd.endElement(EMPTY, EMPTY, "Text");
+		hd.endElement(EMPTY, EMPTY, "Body");
+	}
+
+	public void setText(String text)
+	{
+		this.text = text;
+	}
+
+	public void setStyleRanges(StyleRange[] styles)
+	{
+		this.styles = styles;
 	}
 }

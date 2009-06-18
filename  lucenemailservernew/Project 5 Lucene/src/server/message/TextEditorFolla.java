@@ -1,5 +1,6 @@
 package server.message;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Vector;
@@ -11,6 +12,8 @@ import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -20,16 +23,22 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.ColorDialog;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FontDialog;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Widget;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
+
+import com.sun.org.apache.xml.internal.serialize.OutputFormat;
+import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 /**
  */
@@ -45,96 +54,44 @@ public class TextEditorFolla
 
 	private Vector<StyleRange> cachedStyles = new Vector<StyleRange>();
 
-	private Color RED = null;
-
-	private Color BLUE = null;
-
-	private Color GREEN = null;
-
 	private Font font = null;
 
+	private Composite composite;
+
 	private ToolItem boldButton, italicButton, underlineButton, strikeoutButton;
-
-	Menu createEditMenu() {
-		Menu bar = shell.getMenuBar();
-		Menu menu = new Menu(bar);
-
-		MenuItem item = new MenuItem(menu, SWT.PUSH);
-		item.setText("Cut_menuitem");
-		item.setAccelerator(SWT.MOD1 + 'X');
-		item.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				handleCutCopy();
-				text.cut();
-			}
-		});
-		item = new MenuItem(menu, SWT.PUSH);
-		item.setText("Copy_menuitem");
-		item.setAccelerator(SWT.MOD1 + 'C');
-		item.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				handleCutCopy();
-				text.copy();
-			}
-		});
-		item = new MenuItem(menu, SWT.PUSH);
-		item.setText("Paste_menuitem");
-		item.setAccelerator(SWT.MOD1 + 'V');
-		item.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				text.paste();
-			}
-		});
-		new MenuItem(menu, SWT.SEPARATOR);
-		item = new MenuItem(menu, SWT.PUSH);
-		item.setText("Font_menuitem");
-		item.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				setFont();
-			}
-		});
-		return menu;
-	}
-
-	Menu createFileMenu() {
-		Menu bar = shell.getMenuBar();
-		Menu menu = new Menu(bar);
-
-		MenuItem item = new MenuItem(menu, SWT.PUSH);
-		item.setText("Exit_menuitem");
-		item.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				shell.close();
-			}
-		});
-
-		return menu;
-	}
 
 	/*
 	 * Set a style
 	 */
-	void setStyle(Widget widget) {
+	void setStyle(Widget widget)
+	{
 		Point sel = text.getSelectionRange();
 		if ((sel == null) || (sel.y == 0))
 			return;
 		StyleRange style;
-		for (int i = sel.x; i < sel.x + sel.y; i++) {
+		for (int i = sel.x; i < sel.x + sel.y; i++)
+		{
 			StyleRange range = text.getStyleRangeAtOffset(i);
-			if (range != null) {
+			if (range != null)
+			{
 				style = (StyleRange) range.clone();
 				style.start = i;
 				style.length = 1;
-			} else {
+			} else
+			{
 				style = new StyleRange(i, 1, null, null, SWT.NORMAL);
 			}
-			if (widget == boldButton) {
+			if (widget == boldButton)
+			{
 				style.fontStyle ^= SWT.BOLD;
-			} else if (widget == italicButton) {
+			} else if (widget == italicButton)
+			{
 				style.fontStyle ^= SWT.ITALIC;
-			} else if (widget == underlineButton) {
+			} else if (widget == underlineButton)
+			{
 				style.underline = !style.underline;
-			} else if (widget == strikeoutButton) {
+			} else if (widget == strikeoutButton)
+			{
 				style.strikeout = !style.strikeout;
 			}
 			text.setStyleRange(style);
@@ -145,9 +102,11 @@ public class TextEditorFolla
 	/*
 	 * Clear all style data for the selected text.
 	 */
-	void clear() {
+	void clear()
+	{
 		Point sel = text.getSelectionRange();
-		if ((sel != null) && (sel.y != 0)) {
+		if ((sel != null) && (sel.y != 0))
+		{
 			StyleRange style;
 			style = new StyleRange(sel.x, sel.y, null, null, SWT.NORMAL);
 			text.setStyleRange(style);
@@ -158,19 +117,30 @@ public class TextEditorFolla
 	/*
 	 * Set the foreground color for the selected text.
 	 */
-	void fgColor(Color fg) {
+	void fgColor()
+	{
 		Point sel = text.getSelectionRange();
 		if ((sel == null) || (sel.y == 0))
 			return;
+		ColorDialog dialog = new ColorDialog(composite.getShell());
+		dialog.setText("Text color choosing");
+		RGB rgb = dialog.open();
+		if (rgb == null)
+			return;
+		Color fg = new Color(Display.getDefault(), rgb);
 		StyleRange style, range;
-		for (int i = sel.x; i < sel.x + sel.y; i++) {
+		for (int i = sel.x; i < sel.x + sel.y; i++)
+		{
 			range = text.getStyleRangeAtOffset(i);
-			if (range != null) {
+			if (range != null)
+			{
 				style = (StyleRange) range.clone();
 				style.start = i;
 				style.length = 1;
 				style.foreground = fg;
-			} else {
+			}
+			else
+			{
 				style = new StyleRange(i, 1, fg, null, SWT.NORMAL);
 			}
 			text.setStyleRange(style);
@@ -178,17 +148,38 @@ public class TextEditorFolla
 		text.setSelectionRange(sel.x + sel.y, 0);
 	}
 
-	void createMenuBar() {
-		Menu bar = new Menu(shell, SWT.BAR);
-		shell.setMenuBar(bar);
-
-		MenuItem fileItem = new MenuItem(bar, SWT.CASCADE);
-		fileItem.setText("File_menuitem");
-		fileItem.setMenu(createFileMenu());
-
-		MenuItem editItem = new MenuItem(bar, SWT.CASCADE);
-		editItem.setText("edit");
-		editItem.setMenu(createEditMenu());
+	private void setPartFont()
+	{
+		Point sel = text.getSelectionRange();
+		if ((sel == null) || (sel.y == 0))
+			return;
+		FontDialog fontDialog = new FontDialog(shell);
+		fontDialog.setFontList((text.getFont()).getFontData());
+		FontData fontData = fontDialog.open();
+		if (fontData == null)
+		{
+			return;
+		}
+		Font font = new Font(Display.getDefault(), fontData);
+		StyleRange style = null, range = null;
+		for (int i = sel.x; i < sel.x + sel.y; i++)
+		{
+			range = text.getStyleRangeAtOffset(i);
+			if (range != null)
+			{
+				style = (StyleRange) range.clone();
+				style.start = i;
+				style.length = 1;
+				style.font = font;
+			}
+			else
+			{
+				style = new StyleRange(i, 1,null, null,	font.getFontData()[0].style);
+				style.font = font;
+			}
+			text.setStyleRange(style);
+		}
+		text.setSelectionRange(sel.x + sel.y, 0);
 	}
 
 	void createShell(Display display) {
@@ -197,23 +188,41 @@ public class TextEditorFolla
 		images.loadAll(display);
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 1;
-		shell.setLayout(layout);
-		shell.addDisposeListener(new DisposeListener() {
+		shell.setLayout(new FillLayout());
+		composite = new Composite(shell, SWT.NONE);
+		composite.setLayout(layout);
+		composite.addDisposeListener(new DisposeListener() {
 			public void widgetDisposed(DisposeEvent e) {
 				if (font != null)
 					font.dispose();
 				// images.freeAll();
-				RED.dispose();
-				GREEN.dispose();
-				BLUE.dispose();
 			}
 		});
 	}
 
-	void createStyledText() {
-		initializeColors();
-		text = new StyledText(shell, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL
+	private void createStyledText()
+	{
+		text = new StyledText(composite, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL
 				| SWT.H_SCROLL);
+		text.addKeyListener(new KeyAdapter(){
+			@Override
+			public void keyPressed(KeyEvent e)
+			{
+				if (e.keyCode == (SWT.MOD1 | 'c'))
+				{
+					handleCutCopy();
+					text.copy();
+				}
+				else if (e.keyCode == (SWT.MOD1 | 'x'))
+				{
+					handleCutCopy();
+					text.cut();
+				}
+				else if (e.keyCode == (SWT.MOD1 | 'v'))
+				{
+					text.paste();
+				}
+		}});
 		GridData spec = new GridData();
 		spec.horizontalAlignment = GridData.FILL;
 		spec.grabExcessHorizontalSpace = true;
@@ -228,7 +237,7 @@ public class TextEditorFolla
 	}
 
 	void createToolBar() {
-		toolBar = new ToolBar(shell, SWT.NULL);
+		toolBar = new ToolBar(composite, SWT.NULL);
 		SelectionAdapter listener = new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				setStyle(event.widget);
@@ -253,43 +262,50 @@ public class TextEditorFolla
 
 		ToolItem item = new ToolItem(toolBar, SWT.SEPARATOR);
 		item = new ToolItem(toolBar, SWT.PUSH);
-		item.setImage(images.Red);
-		item.setText("Red");
-		item.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				fgColor(RED);
-			}
-		});
-		item = new ToolItem(toolBar, SWT.PUSH);
-		item.setText("Green");
-		item.setImage(images.Green);
-		item.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				fgColor(GREEN);
-			}
-		});
-		item = new ToolItem(toolBar, SWT.PUSH);
-		item.setText("Blue");
-		item.setImage(images.Blue);
-		item.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				fgColor(BLUE);
+		item.setText("Color");
+		item.addSelectionListener(new SelectionAdapter()
+		{
+			public void widgetSelected(SelectionEvent event)
+			{
+				fgColor();
 			}
 		});
 		item = new ToolItem(toolBar, SWT.SEPARATOR);
 		item = new ToolItem(toolBar, SWT.PUSH);
 		item.setText("Erase");
 		item.setImage(images.Erase);
-		item.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
+		item.addSelectionListener(new SelectionAdapter()
+		{
+			public void widgetSelected(SelectionEvent event)
+			{
 				clear();
 			}
 		});
 		item = new ToolItem(toolBar, SWT.PUSH);
 		item.setText("Save");
-		item.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
-				System.out.println(save());
+		item.addSelectionListener(new SelectionAdapter()
+		{
+			public void widgetSelected(SelectionEvent event)
+			{
+				save();
+			}
+		});
+		item = new ToolItem(toolBar, SWT.PUSH);
+		item.setText("Font");
+		item.addSelectionListener(new SelectionAdapter()
+		{
+			public void widgetSelected(SelectionEvent event)
+			{
+				setFont();
+			}
+		});
+		item = new ToolItem(toolBar, SWT.PUSH);
+		item.setText("Z");
+		item.addSelectionListener(new SelectionAdapter()
+		{
+			public void widgetSelected(SelectionEvent event)
+			{
+				setPartFont();
 			}
 		});
 	}
@@ -333,7 +349,8 @@ public class TextEditorFolla
 		StyleRange style;
 		if (event.length == 1
 				|| text.getTextRange(event.start, event.length).equals(
-						text.getLineDelimiter())) {
+						text.getLineDelimiter()))
+		{
 			// Have the new text take on the style of the text to its right
 			// (during
 			// typing) if no style information is active.
@@ -341,11 +358,14 @@ public class TextEditorFolla
 			style = null;
 			if (caretOffset < text.getCharCount())
 				style = text.getStyleRangeAtOffset(caretOffset);
-			if (style != null) {
+			if (style != null)
+			{
 				style = (StyleRange) style.clone();
 				style.start = event.start;
 				style.length = event.length;
-			} else {
+			}
+			else
+			{
 				style = new StyleRange(event.start, event.length, null, null,
 						SWT.NORMAL);
 			}
@@ -369,19 +389,8 @@ public class TextEditorFolla
 		}
 	}
 
-	public static void main(String[] args) {
-		Display display = new Display();
-		TextEditorFolla example = new TextEditorFolla();
-		Shell shell = example.open(display);
-		while (!shell.isDisposed())
-			if (!display.readAndDispatch())
-				display.sleep();
-		display.dispose();
-	}
-
 	public Shell open(Display display) {
 		createShell(display);
-		createMenuBar();
 		createToolBar();
 		createStyledText();
 		shell.setSize(500, 300);
@@ -389,12 +398,15 @@ public class TextEditorFolla
 		return shell;
 	}
 
-	void setFont() {
+	private void setFont()
+	{
 		FontDialog fontDialog = new FontDialog(shell);
 		fontDialog.setFontList((text.getFont()).getFontData());
 		FontData fontData = fontDialog.open();
-		if (fontData != null) {
-			if (font != null) {
+		if (fontData != null)
+		{
+			if (font != null)
+			{
 				font.dispose();
 			}
 			font = new Font(shell.getDisplay(), fontData);
@@ -402,16 +414,39 @@ public class TextEditorFolla
 		}
 	}
 
-	void initializeColors() {
-		Display display = Display.getDefault();
-		RED = new Color(display, new RGB(255, 0, 0));
-		BLUE = new Color(display, new RGB(0, 0, 255));
-		GREEN = new Color(display, new RGB(0, 255, 0));
-	}
-	
 	public Body save()
 	{
+		try {
+			write(new Body(text.getText(), text.getStyleRanges()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		}
 		return new Body(text.getText(), text.getStyleRanges());
+	}
+
+	void write(Body body) throws IOException, SAXException
+	{
+		OutputFormat of = new OutputFormat("XML","ISO-8859-1",true);
+		of.setIndent(5);//set indentation dfor XML tags
+		of.setIndenting(true);
+		//create XML serializer with file output stream and output format
+		XMLSerializer serializer = new XMLSerializer(new FileOutputStream("bodytoto.xml"), of);
+		//get content handler to handle tags in XML doc
+		ContentHandler hd = serializer.asContentHandler();
+		body.writeXML(hd) ;
+	}
+
+	public static void main(String[] args)
+	{
+		Display display = new Display();
+		TextEditorFolla example = new TextEditorFolla();
+		Shell shell = example.open(display);
+		while (!shell.isDisposed())
+			if (!display.readAndDispatch())
+				display.sleep();
+		display.dispose();
 	}
 }
 

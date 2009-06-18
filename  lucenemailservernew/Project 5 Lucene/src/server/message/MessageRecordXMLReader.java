@@ -22,6 +22,7 @@ public class MessageRecordXMLReader extends DefaultHandler
 	{
 		this.url = url;
 		this.record = new MessageRecord();
+		buf = new StringBuffer();
 		counter = 0;
 	}
 
@@ -48,18 +49,17 @@ public class MessageRecordXMLReader extends DefaultHandler
 		}
 		return record;
 	}
-	
+
 	public void startElement(String uri, String localName, String name,
 			Attributes atts) throws SAXException 
 	{
-		buf = new StringBuffer();
+		buf.setLength(0);
 	}
 
 	public void characters(char[] ch, int start, int length)
 			throws SAXException 
 	{
-		String str = new String(ch,start,length);
-		buf.append(str);
+		buf.append(ch, start, length);
 	}
 
 	public void endElement(String uri, String localName, String name)
