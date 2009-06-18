@@ -169,6 +169,29 @@ public class Controller {
 		}
 	}
 	
+	public String forgetPassword(String userName)
+	{
+		Profile prof = openProfile(userName);
+		return prof.getSecretQuestion();
+	}
+	
+	public String getPassword(String userName, String secretAnswer)
+	{
+		Profile prof = openProfile(userName);
+		if (prof.getSecretAnswer().equals(secretAnswer))
+			return prof.getPassword();
+		return null;
+	}
+	
+	public Message openMessage(MessageRecord rec)
+	{
+		String str = "" + rec.getPrimaryKey();
+		for(int j = str.length(); j < Constants.PRIMARY_KEY_LENGTH; j++)
+			str = "0" + str;
+		return new MessageDetailedViewXMLReader(Constants.MESSAGES_PATH 
+				+ rec.getSender() + "." + str + ".xml").beginParsing();
+	}
+	
 	public Profile openProfile(String userName)
 	{
 		File folder = new File(Constants.ACCOUNTS_PATH + userName 
