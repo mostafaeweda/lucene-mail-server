@@ -150,7 +150,7 @@ public class Controller {
 		}
 		return messages;
 	}
-	
+
 	public void moveMessage(String IP, MessageRecord[] msgs, String to) throws CorruptIndexException, IOException
 	{
 		Contact sender = onlineContacts.get(IP);
@@ -223,6 +223,12 @@ public class Controller {
 		onlineContacts = newVar;
 	}
 
+	public void addContact(String IP, String name)
+	{
+		Contact con = onlineContacts.get(IP);
+		con.addContact(name);
+	}
+	
 	/**
 	 * Get the value of onlineContacts
 	 * @return the value of onlineContacts
@@ -248,14 +254,14 @@ public class Controller {
 	public static void main(String[] args) throws Exception 
 	{
 		Controller cont = new Controller();
-		cont.SignIn("1", "1", "12");
-		cont.sendMessage("12", new String[]{"2"}, "3weda!!!", new Body("3weda yasser and 3ebso and kimo :p", null));
+		cont.SignIn("1", "1", "12");                                        
+		cont.sendMessage("12", new String[]{"2"}, "3weda!!!", new Body("3weda yasser and 3ebso and sossa :p", null));
 		cont.sendMessage("12", new String[]{"2"}, "7mraaa!!!", new Body("7mra ya 3weda :p", null));
 		cont.sendMessage("12", new String[]{"2"}, "hii", new Body("ezayak ya meshmesh :p", null));
 		cont.SignIn("2", "2", "13");
-		MessageRecord[] record = cont.search("13", "kimo", 0, 20);
+		MessageRecord[] record = cont.search("13", "yasser", 0, 20);
 		System.out.println("-------------------------------------------------");
 		cont.deleteMessages("13", record);
-		record = cont.search("13", "3weda", 0, 20);
+		record = cont.search("13", "Folder:Inbox", 0, 20);
 	}
 }
