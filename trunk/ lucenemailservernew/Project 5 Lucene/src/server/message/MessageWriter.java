@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
+import java.text.DateFormat;
+import java.util.Date;
 
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
@@ -60,7 +62,9 @@ public class MessageWriter extends XMLwriter {
 		hd.startElement("", "", "Message", atts);
 		writeElem(hd, "Sender", message.getSender(), atts);
 		writeElem(hd, "Subject", message.getSubject(), atts);
-		writeElem(hd, "Date", message.getDate(), atts);
+		String dat = DateFormat.getInstance().format(new Date());
+		message.setDate(dat);
+		writeElem(hd, "Date", dat, atts);
 		String recievers[] = message.getRecievers();
 		hd.startElement("","","Receivers",atts);
 		for (int i = 0; i < recievers.length; i++)
@@ -126,6 +130,14 @@ public class MessageWriter extends XMLwriter {
 		channelOut.write(buff);
 		channelIn.close();
 		channelOut.close();
+	}
+
+	public Message forward(Contact contact, MessageRecord msgRec)
+	{
+		MessageDetailedViewXMLReader reader = new MessageDetailedViewXMLReader(Constants.MESSAGES_PATH +
+					contact.getUserName() + msgRec.getPrimaryKey());
+		Message msg = reader.beginParsing();
+		return msg;
 	}
 
 

@@ -1,6 +1,5 @@
 package server.message;
 
-import java.util.Date;
 
 /**
  * Class Message
@@ -33,7 +32,6 @@ public class Message extends MessageRecord
 		this.recievers = recievers;
 		this.subject = subject;
 		this.body = body;
-		this.date = new Date().toString();
 	}
 
 	/**
