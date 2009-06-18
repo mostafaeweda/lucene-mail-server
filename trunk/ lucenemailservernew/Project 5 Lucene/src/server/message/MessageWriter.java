@@ -70,7 +70,7 @@ public class MessageWriter extends XMLwriter {
 			hd.endElement("", "", "Receiver");
 		}
 		hd.endElement("","","Receivers");
-		message.getBody().writeXML(hd);
+		writeElem(hd, "Body", message.getBody().toString(), atts);
 		hd.startElement("","","Attachments",atts);
 		if (attachments != null)
 			for (int i = 0; i < attachments.length; i++)
