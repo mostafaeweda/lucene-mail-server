@@ -16,6 +16,7 @@ public class Contact {
 	//
 	// Fields
 	//
+	
 
 	private int primarySent;
 	private String userName;

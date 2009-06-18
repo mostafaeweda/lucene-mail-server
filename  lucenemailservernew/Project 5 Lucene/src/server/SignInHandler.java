@@ -91,9 +91,7 @@ public class SignInHandler
 				
 			};
 			saxParser.parse(contactList, handler);
-			String[] listArr = new String[list.size()];
-			list.toArray(listArr);
-			result.setContactList(listArr);
+			result.setContactList(list);
 		}
 		Properties props = new Properties();
 		props.loadFromXML(new FileInputStream(Constants.ACCOUNTS_PATH 
